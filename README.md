@@ -26,8 +26,9 @@ python main.py
 
 ## Contributors
 
-Abel Espin romero 1605961@uab.cat
-Biel Castellarnau Ruiz 1599417@uab.cat
+- Abel Espin Romero 1605961@uab.cat
+- Biel Castellarnau Ruiz 1599417@uab.cat
+- Sergi Garriga Mas 1606989@uab.cat
 
 Xarxes Neuronals i Aprenentatge Profund
 
