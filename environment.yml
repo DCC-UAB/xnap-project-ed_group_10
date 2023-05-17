@@ -1,7 +1,7 @@
 name: xnap-example
 channels:
 - pytorch
-- defaults
+- conda-forge
 dependencies:
 - python=3.8
 - pytorch
@@ -9,6 +9,10 @@ dependencies:
 - tqdm
 - tensorboard
 - protobuf<=3.20
+- pillow
+- fasttext
+- fasttext.utils
+- einops
 - pip
 - pip:
   - torchvision
