@@ -10,7 +10,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 
-from train import *
+from utils.train_best_params import *
 from test import *
 from utils.utils import *
 from tqdm.auto import tqdm

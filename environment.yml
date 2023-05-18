@@ -10,8 +10,6 @@ dependencies:
 - tensorboard
 - protobuf<=3.20
 - pillow
-- fasttext
-- fasttext.utils
 - einops
 - pip
 - pip:

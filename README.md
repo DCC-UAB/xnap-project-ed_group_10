@@ -30,23 +30,23 @@ https://github.com/lluisgomez/ConTextTransformer
 
 The codebase for this project is structured as follows:
 
-├── data/
-├── models/
-│   └── saved_models/
-├── results/
-│   ├── train/
-│   └── test/
-├── src/
-│   ├── data/
-│   ├── models/
-│   ├── utils/
-│   ├── visualization/
-│   ├── train.py
-│   └── test.py
-├── config.py
-├── requirements.txt
-├── README.md
-└── main.py
+├── data/ 
+├── models/ 
+│   └── saved_models/ 
+├── results/ 
+│   ├── train/ 
+│   └── test/ 
+├── src/ 
+│   ├── data/ 
+│   ├── models/ 
+│   ├── utils/ 
+│   ├── visualization/ 
+│   ├── train.py 
+│   └── test.py 
+├── config.py 
+├── requirements.txt 
+├── README.md 
+└── main.py 
 
 The `data` directory will contain all the data files. The `models` directory contains a subdirectory for saved models. The `results` directory contains subdirectories for training and evaluation results. The `src` directory contains the source code for the project, organized into subdirectories for data processing, model architectures, utility functions, visualization, training, and evaluation. The `config.py` file contains configuration parameters for the project, such as hyperparameters for the model and file paths for the data. The `requirements.txt` file lists the dependencies required to run the project. The `README.md` file contains instructions on how to set up and run the project, as well as information on the project's goals and structure. Finally, the `main.py` file is the entry point for running the project.
 
