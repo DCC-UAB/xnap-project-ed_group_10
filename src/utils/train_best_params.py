@@ -12,28 +12,32 @@ from torch.utils.data import Dataset
 from einops import rearrange
 
 from  ... import config
-from data.conTextDataset import conTextDataset
+from data.dataloader import Dataloader
 from models.conTextTransformer import conTextTransformer
 
 
-def train(model, loader, criterion, optimizer, config):
+def train(model, loader, criterion, optimizer):
+    
     # Tell wandb to watch what the model gets up to: gradients, weights, and more!
     wandb.watch(model, criterion, log="all", log_freq=10)
 
-    # Run training and track with wandb
-    total_batches = len(loader) * config.epochs
+    train_loss_history, test_loss_history = [], []
+    best_acc = 0.
     example_ct = 0  # number of examples seen
-    batch_ct = 0
-    for epoch in tqdm(range(config.epochs)):
-        for _, (images, labels) in enumerate(loader):
-
-            loss = train_batch(images, labels, model, optimizer, criterion)
-            example_ct +=  len(images)
-            batch_ct += 1
-
-            # Report metrics every 25th batch
-            if ((batch_ct + 1) % 25) == 0:
-                train_log(loss, example_ct, epoch)
+    
+    # Train the model that has the best hyperparameters
+    for epoch in range(1, config.num_epochs + 1):
+        
+        print('Epoch:', epoch)
+        train_epoch(model, optimizer, train_loader, train_loss_history)
+        acc = evaluate(model, test_loader, test_loss_history)
+        
+        example_ct += len(train_loader.dataset)
+        
+        if acc>best_acc: torch.save(model.state_dict(), '../results/all_best_params.pth')
+        scheduler.step()
+        
+        train_log(acc, example_ct, epoch)
 
 
 def train_epoch(model, optimizer, data_loader, loss_history):
@@ -53,7 +57,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
 
         if i % 100 == 0:
             print('[' +  '{:5}'.format(i * len(data_img)) + '/' + '{:5}'.format(total_samples) +
-                 ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
+                ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                 '{:6.4f}'.format(loss.item()))
             loss_history.append(loss.item())
 
@@ -105,57 +109,35 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
     return loss
 
 
-def train_log(loss, example_ct, epoch):
+def train_log(acc, example_ct, epoch):
     # Where the magic happens
-    wandb.log({"epoch": epoch, "loss": loss}, step=example_ct)
-    print(f"Loss after {str(example_ct).zfill(5)} examples: {loss:.3f}")
+    wandb.log({"epoch": epoch, "acc": acc}, step=example_ct)
+    print(f"Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}")
     
 
 if __name__ == "__main__":
     
-    json_file = '/datatmp/datasets/ConText/annotations/split_0.json'
-    img_dir = "../data/data_images/data/JPEGImages"
-    txt_dir = "/datatmp/datasets/ConText/ocr_labels/"
-    input_size = 256
-    data_transforms_train = torchvision.transforms.Compose([
-            torchvision.transforms.RandomResizedCrop(input_size),
-            torchvision.transforms.RandomHorizontalFlip(),
-            torchvision.transforms.ToTensor(),
-            torchvision.transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
-    data_transforms_test = torchvision.transforms.Compose([
-            torchvision.transforms.Resize(input_size),
-            torchvision.transforms.CenterCrop(input_size),
-            torchvision.transforms.ToTensor(),
-            torchvision.transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
-    train_set = conTextDataset(json_file, img_dir, txt_dir, True, data_transforms_train)
-    test_set  = conTextDataset(json_file, img_dir, txt_dir, False, data_transforms_test)
-    train_loader = torch.utils.data.DataLoader(train_set, batch_size=64, shuffle=True, num_workers=8)
-    test_loader = torch.utils.data.DataLoader(test_set, batch_size=64, shuffle=False, num_workers=8)
+    # + ------------------------
+    # | 1. Load data
+    # + ------------------------
+            
+    train_loader, test_loader = Dataloader().get_dataloader()
         
-        
-    N_EPOCHS = 50
     start_time = time.time()
 
-    model = conTextTransformer(image_size=input_size, num_classes=28, channels=3, dim=256, depth=2, heads=4, mlp_dim=512)
+    model = conTextTransformer(image_size=config.image_size, num_classes=28, 
+                               channels=3, dim=256, depth=2, heads=4, mlp_dim=512)
     model.to(config.device)
+    
+    # Update only the parameters where requires_grad is True
     params_to_update = []
     for name,param in model.named_parameters():
         if param.requires_grad == True:
             params_to_update.append(param)
-    optimizer = torch.optim.Adam(params_to_update, lr=0.0001)
-
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=0.1)
-
-    train_loss_history, test_loss_history = [], []
-    best_acc = 0.
-
-    for epoch in range(1, N_EPOCHS + 1):
-        print('Epoch:', epoch)
-        train_epoch(model, optimizer, train_loader, train_loss_history)
-        acc = evaluate(model, test_loader, test_loss_history)
-        if acc>best_acc: torch.save(model.state_dict(), '../results/all_best_params.pth')
-        scheduler.step()
+            
+    optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
+    
+    train(model, train_loader, test_loader, optimizer, scheduler)
 
     print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
