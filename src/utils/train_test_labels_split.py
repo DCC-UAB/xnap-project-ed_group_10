@@ -29,8 +29,8 @@ def create_json_file(folder_path, json_file):
         json.dump(data, file)
 
 # Ruta de la carpeta "0" y nombre del archivo JSON resultante
-folder_path = "../features/data/ImageSets/0"
-json_file = "../features/data/ImageSets/0/split_0.json"
+folder_path = "./data/data_images/data/ImageSets/2"
+json_file = "./data/data_Images/data/ImageSets/2/split_2.json"
 
 # Crear el archivo JSON con los datos de los archivos de texto en la carpeta
 create_json_file(folder_path, json_file)
