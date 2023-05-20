@@ -14,6 +14,8 @@ from einops import rearrange
 import fasttext
 import fasttext.util
 
+import json
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
 print(torch.__version__)
@@ -122,9 +124,11 @@ class ConTextDataset(Dataset):
 
         return image, text, text_mask, target
 
-json_file = '/datatmp/datasets/ConText/annotations/split_0.json'
-img_dir = "/datatmp/datasets/ConText/data/JPEGImages/"
-txt_dir = "/datatmp/datasets/ConText/ocr_labels/"
+
+
+json_file = "./data/data_images/data/ImageSets/0/split_0.json"
+img_dir = "./data/data_images/data/JPEGImages/"
+txt_dir = "/datatmp/datasets/ConText/ocr_labels/" #?
 input_size = 256
 data_transforms_train = torchvision.transforms.Compose([
         torchvision.transforms.RandomResizedCrop(input_size),
