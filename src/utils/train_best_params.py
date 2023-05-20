@@ -1,19 +1,18 @@
-from tqdm.auto import tqdm
 import wandb
-
-import time,os,json
-from PIL import Image
-import numpy as np
+import time,os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision
-from torch.utils.data import Dataset
-from einops import rearrange
+import sys
+import os
 
-from  ... import config
-from data.dataloader import Dataloader
-from models.conTextTransformer import conTextTransformer
+# Add the parent directory to the system path
+parent_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(parent_dir))
+
+from config import *
+from models.conTextTransformer import ConTextTransformer
+from data.dataloader import *
 
 
 def train(model, loader, criterion, optimizer):
@@ -21,6 +20,7 @@ def train(model, loader, criterion, optimizer):
     # Tell wandb to watch what the model gets up to: gradients, weights, and more!
     wandb.watch(model, criterion, log="all", log_freq=10)
 
+    # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
     best_acc = 0.
     example_ct = 0  # number of examples seen
@@ -34,9 +34,11 @@ def train(model, loader, criterion, optimizer):
         
         example_ct += len(train_loader.dataset)
         
+        # Save the model with the best accuracy
         if acc>best_acc: torch.save(model.state_dict(), '../results/all_best_params.pth')
         scheduler.step()
         
+        # Log metrics to visualize performance        
         train_log(acc, example_ct, epoch)
 
 
@@ -44,6 +46,10 @@ def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
     model.train()
 
+    # This part of the code will use the log_softmax function to compute the log of the softmax function
+    # and then use the nll_loss function to compute the negative log likelihood loss.
+    # This is done because the log_softmax function is numerically more stable than the softmax function.
+    
     for i, (data_img, data_txt, txt_mask, target) in enumerate(data_loader):
         data_img = data_img.to(config.device)
         data_txt = data_txt.to(config.device)
@@ -54,7 +60,8 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
-
+        
+        # Print loss every 100 batches
         if i % 100 == 0:
             print('[' +  '{:5}'.format(i * len(data_img)) + '/' + '{:5}'.format(total_samples) +
                 ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
@@ -117,15 +124,9 @@ def train_log(acc, example_ct, epoch):
 
 if __name__ == "__main__":
     
-    # + ------------------------
-    # | 1. Load data
-    # + ------------------------
-            
-    train_loader, test_loader = Dataloader().get_dataloader()
-        
+    train_loader, test_loader = Dataloader().get_loaders()
     start_time = time.time()
-
-    model = conTextTransformer(image_size=config.image_size, num_classes=28, 
+    model = ConTextTransformer(image_size=config.image_size, num_classes=28, 
                                channels=3, dim=256, depth=2, heads=4, mlp_dim=512)
     model.to(config.device)
     
@@ -136,6 +137,8 @@ if __name__ == "__main__":
             params_to_update.append(param)
             
     optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+    
+    # The scheduler will update the learning rate after every epoch to achieve a better convergence
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
     
     train(model, train_loader, test_loader, optimizer, scheduler)

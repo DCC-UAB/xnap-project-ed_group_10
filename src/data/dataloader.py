@@ -15,11 +15,11 @@ from torchvision import transforms
 from transformers import BertTokenizer
 
 import config
-from data.conTextDataset import conTextDataset
+from data.conTextDataset import ConTextDataset
 
 
 class Dataloader():
-    def __init__(self, train_dir, test_dir, batch_size, num_workers):
+    def __init__(self):
 
         # data_transforms_train --> This is the data augmentation and normalization we will use for the training data
         # data_transforms_test  --> This is the normalization we will use for the validation data
@@ -44,10 +44,10 @@ class Dataloader():
         
         # Create the dataset and dataloader
         
-        train_set = conTextDataset(config.json_file, config.img_dir, config.txt_dir, True, self.data_transforms_train)
-        test_set  = conTextDataset(config.json_file, config.img_dir, config.txt_dir, False, self.data_transforms_test)
+        train_set = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, True, self.data_transforms_train)
+        test_set  = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, False, self.data_transforms_test)
         
-        train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, config.num_workers)
-        test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, config.num_workers)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
         
         return train_loader, test_loader
