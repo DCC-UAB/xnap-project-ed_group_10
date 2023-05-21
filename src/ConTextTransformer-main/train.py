@@ -128,7 +128,7 @@ class ConTextDataset(Dataset):
 
 json_file = "./data/data_images/data/ImageSets/0/split_0.json"
 img_dir = "./data/data_images/data/JPEGImages/"
-txt_dir = "/datatmp/datasets/ConText/ocr_labels/" #?
+txt_dir = "./data/data_images/data/ocr_labels/"
 input_size = 256
 data_transforms_train = torchvision.transforms.Compose([
         torchvision.transforms.RandomResizedCrop(input_size),
