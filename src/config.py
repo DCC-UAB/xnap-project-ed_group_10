@@ -1,9 +1,9 @@
 import torch
 
 # Data
-json_file = '/datatmp/datasets/ConText/annotations/split_0.json'
-img_dir = "../data/data_images/data/JPEGImages"
-txt_dir = "/datatmp/datasets/ConText-WordAnnotations"
+json_file = "./data/data_images/data/ImageSets/0/split_0.json"
+img_dir = "./data/data_images/data/JPEGImages/"
+txt_dir = "./data/data_images/data/ocr_labels/"
 data_dir = 'data/'
 train_dir = data_dir + 'train/'
 test_dir = data_dir + 'test/'
@@ -28,3 +28,5 @@ early_stopping = True
 save_dir = 'models/saved_models/'
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 gamma = 0.1
+
+
