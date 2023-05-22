@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import sys
 import os
+import datetime
 
 # Add the parent directory to the system path
 parent_dir = os.path.dirname(os.path.abspath(__file__))
@@ -123,7 +124,10 @@ def train_log(acc, example_ct, epoch):
     
 
 if __name__ == "__main__":
-    wandb.init()
+    
+    run_name = "train_best_params_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    wandb.init(project="bussiness_uab", 
+               name=run_name)
     
     train_loader, test_loader = Dataloader().get_loaders()
     start_time = time.time()
