@@ -15,7 +15,7 @@ from models.conTextTransformer import ConTextTransformer
 from data.dataloader import *
 
 
-def train(model, loader, criterion, optimizer):
+def train(model, train_loader, criterion, optimizer, scheduler):
     
     # Tell wandb to watch what the model gets up to: gradients, weights, and more!
     wandb.watch(model, criterion, log="all", log_freq=10)
@@ -35,7 +35,7 @@ def train(model, loader, criterion, optimizer):
         example_ct += len(train_loader.dataset)
         
         # Save the model with the best accuracy
-        if acc>best_acc: torch.save(model.state_dict(), '../results/all_best_params.pth')
+        if acc>best_acc: torch.save(model.state_dict(), './all_best_params.pth')
         scheduler.step()
         
         # Log metrics to visualize performance        
@@ -123,6 +123,7 @@ def train_log(acc, example_ct, epoch):
     
 
 if __name__ == "__main__":
+    wandb.init()
     
     train_loader, test_loader = Dataloader().get_loaders()
     start_time = time.time()
@@ -141,6 +142,9 @@ if __name__ == "__main__":
     # The scheduler will update the learning rate after every epoch to achieve a better convergence
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
     
-    train(model, train_loader, test_loader, optimizer, scheduler)
+    criterion = nn.CrossEntropyLoss()
+
+
+    train(model, train_loader, criterion, optimizer, scheduler)
 
     print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')

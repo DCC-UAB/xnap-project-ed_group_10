@@ -8,8 +8,8 @@ data_dir = 'data/'
 train_dir = data_dir + 'train/'
 test_dir = data_dir + 'test/'
 num_classes = 28
-batch_size = 32
-num_workers = 8
+batch_size = 16
+num_workers = 6
 
 # Model
 image_size = 256
