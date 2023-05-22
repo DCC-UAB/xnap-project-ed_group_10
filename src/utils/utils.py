@@ -6,7 +6,6 @@ import torchvision.transforms as transforms
 from models.convNet import *
 from PIL import Image
 import numpy as np
-import easyocr
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -16,45 +15,58 @@ from einops import rearrange
 import fasttext
 import fasttext.util
 
+from models.conTextTransformer import conTextTransformer
+from data.dataloader import *
 
-def get_data(slice=1, train=True):
-    full_dataset = torchvision.datasets.MNIST(root=".",
-                                              train=train, 
-                                              transform=transforms.ToTensor(),
-                                              download=True)
-    #  equiv to slicing with [::slice] 
-    sub_dataset = torch.utils.data.Subset(
-      full_dataset, indices=range(0, len(full_dataset), slice))
+
+def make_loader(train=True):
     
-    return sub_dataset
-
-
-def make_loader(dataset, batch_size):
-    loader = torch.utils.data.DataLoader(dataset=dataset,
-                                         batch_size=batch_size, 
-                                         shuffle=True,
-                                         pin_memory=True, num_workers=2)
+    train = "train" if train else "test"
+    loader = Dataloader().get_loaders(train)    
     return loader
 
 
-def make(config, device="cuda"):
+def make(config):
+    
     # Make the data
-    train, test = get_data(train=True), get_data(train=False)
-    train_loader = make_loader(train, batch_size=config.batch_size)
-    test_loader = make_loader(test, batch_size=config.batch_size)
+    train_loader = make_loader(train=True)
+    test_loader = make_loader(train=False)
 
     # Make the model
-    model = ConvNet(config.kernels, config.classes).to(device)
+    model = conTextTransformer(
+        image_size=config.image_size,
+        num_classes=config.num_classes,
+        channels=config.channels,
+        dim=config.dim,
+        depth=config.depth,
+        heads=config.heads, 
+        mlp_dim=config.mlp_dim
+    ).to(config.device)
 
     # Make the loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(
-        model.parameters(), lr=config.learning_rate)
     
+    params_to_update = []
+    for name, param in model.named_parameters():
+        if param.requires_grad == True:
+            params_to_update.append(param)
+    optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+        
     return model, train_loader, test_loader, criterion, optimizer
 
 
 def context_inference(img_filename, OCR_tokens):
+    
+    fasttext.util.download_model('en', if_exists='ignore')  # English
+    fasttext_model = fasttext.load_model('cc.en.300.bin')
+    
+    img_transforms = torchvision.transforms.Compose([
+        torchvision.transforms.Resize(256),
+        torchvision.transforms.CenterCrop(256),
+        torchvision.transforms.ToTensor(),
+        torchvision.transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    
     img = Image.open(img_filename).convert('RGB')
     img = img_transforms(img)
     img = torch.unsqueeze(img, 0)

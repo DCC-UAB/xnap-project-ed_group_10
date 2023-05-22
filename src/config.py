@@ -13,7 +13,12 @@ num_workers = 6
 
 # Model
 image_size = 256
+dim = 256
+depth = 2
+channels = 3
+heads = 4
 num_layers = 12
+mlp_dim = 512
 num_heads = 12
 dim_feedforward = 3072
 dropout = 0.1
@@ -26,7 +31,7 @@ num_epochs = 1
 patience = 5
 early_stopping = True
 save_dir = 'models/saved_models/'
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 gamma = 0.1
 
 

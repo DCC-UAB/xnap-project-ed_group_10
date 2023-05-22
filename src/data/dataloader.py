@@ -40,14 +40,32 @@ class Dataloader():
                                                  [0.229, 0.224, 0.225])
             ])
         
-    def get_loaders(self):
+    def get_loaders(self, train_test=None):
         
-        # Create the dataset and dataloader
+        if train_test is None:
+            
+            # Create the dataset and dataloader
         
-        train_set = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, True, self.data_transforms_train)
-        test_set  = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, False, self.data_transforms_test)
+            train_set = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, True, self.data_transforms_train)
+            test_set  = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, False, self.data_transforms_test)
+            
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
+            test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
+            
+            return train_loader, test_loader
         
-        train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
-        test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
+        elif train_test == "train":
+            
+            # Create the dataset and dataloader for train
         
-        return train_loader, test_loader
+            train_set = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, True, self.data_transforms_train)
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
+            return train_loader
+        
+        elif train_test == "test":
+            
+            # Create the dataset and dataloader for test
+        
+            test_set  = ConTextDataset(config.json_file, config.img_dir, config.txt_dir, False, self.data_transforms_test)
+            test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
+            return test_loader
