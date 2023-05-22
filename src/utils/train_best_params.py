@@ -123,7 +123,9 @@ def train_log(acc, example_ct, epoch):
     
 
 if __name__ == "__main__":
-    wandb.init()
+    
+    wandb.init(project="bussiness_uab", 
+               name="train_best_params")
     
     print("# --------------------------------------------------")
     print("Starting training best parameters for the model...")
@@ -171,3 +173,5 @@ if __name__ == "__main__":
     train(model, train_loader, criterion, optimizer, scheduler)
 
     print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
+    
+    wandb.finish()

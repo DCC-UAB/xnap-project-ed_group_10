@@ -19,3 +19,4 @@ dependencies:
   - onnxruntime
   - ipykernel
   - transformers
+  - fasttext

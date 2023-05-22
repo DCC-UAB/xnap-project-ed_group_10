@@ -9,6 +9,7 @@ import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+import time
 
 from utils.train_best_params import *
 from test import *
@@ -48,6 +49,8 @@ def model_pipeline(cfg:dict, do_train=True, do_test=True) -> nn.Module:
 if __name__ == "__main__":
     
     wandb.login()
+    
+    time_start = time.time()
 
     cfg = dict(
         epochs=config.epochs,
@@ -61,3 +64,7 @@ if __name__ == "__main__":
         
     model = model_pipeline(cfg)
 
+    time_end = time.time()
+    print("Total execution time:", time_end - time_start)
+
+    wandb.finish()
