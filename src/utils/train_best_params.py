@@ -125,12 +125,35 @@ def train_log(acc, example_ct, epoch):
 if __name__ == "__main__":
     wandb.init()
     
+    print("# --------------------------------------------------")
+    print("Starting training best parameters for the model...")
+    print("Device:", config.device)
+    print("Number of epochs:", config.num_epochs)
+    print("Batch size:", config.batch_size)
+    print("Learning rate:", config.lr)
+    print("Image size:", config.image_size)
+    print("Number of classes:", config.num_classes)
+    print("Number of channels:", config.channels)
+    print("Dimension:", config.dim)
+    print("Depth:", config.depth)
+    print("Number of heads:", config.heads)
+    print("MLP dimension:", config.mlp_dim)
+    print("# --------------------------------------------------")
+    
     train_loader, test_loader = Dataloader().get_loaders()
     start_time = time.time()
-    model = ConTextTransformer(image_size=config.image_size, num_classes=28, 
-                               channels=3, dim=256, depth=2, heads=4, mlp_dim=512)
-    model.to(config.device)
     
+    # Make the model
+    model = ConTextTransformer(
+        image_size=config.image_size,
+        num_classes=config.num_classes,
+        channels=config.channels,
+        dim=config.dim,
+        depth=config.depth,
+        heads=config.heads, 
+        mlp_dim=config.mlp_dim
+    ).to(config.device)
+        
     # Update only the parameters where requires_grad is True
     params_to_update = []
     for name,param in model.named_parameters():
