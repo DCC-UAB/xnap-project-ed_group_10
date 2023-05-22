@@ -48,7 +48,9 @@ def model_pipeline(cfg:dict, do_train=True, do_test=True) -> nn.Module:
 
 if __name__ == "__main__":
     
-    wandb.login()
+    run_name = "main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    wandb.init(project="bussiness_uab", 
+               name=run_name)
     
     time_start = time.time()
 
