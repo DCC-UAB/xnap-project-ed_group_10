@@ -36,11 +36,15 @@ def train(model, train_loader, criterion, optimizer, scheduler):
         example_ct += len(train_loader.dataset)
         
         # Save the model with the best accuracy
-        if acc>best_acc: torch.save(model.state_dict(), './all_best_params.pth')
+        if acc>best_acc: 
+            torch.save(model.state_dict(), './all_best_params.pth')
+            wandb.save("./all_best_params.pth")
+            best_acc = acc
+
         scheduler.step()
         
         # Log metrics to visualize performance        
-        train_log(acc, example_ct, epoch)
+        train_log(acc, example_ct, epoch, optimizer.param_groups[0]['lr'])
 
 
 def train_epoch(model, optimizer, data_loader, loss_history):
@@ -117,9 +121,9 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
     return loss
 
 
-def train_log(acc, example_ct, epoch):
+def train_log(acc, example_ct, epoch, lr):
     # Where the magic happens
-    wandb.log({"epoch": epoch, "acc": acc}, step=example_ct)
+    wandb.log({"epoch": epoch, "acc": acc, "lr":lr}, step=example_ct)
     print(f"Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}")
     
 
