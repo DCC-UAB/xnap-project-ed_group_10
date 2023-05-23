@@ -11,7 +11,7 @@ import datetime
 parent_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(parent_dir))
 
-from config import *
+import config
 from models.conTextTransformer import ConTextTransformer
 from data.dataloader import *
 
@@ -126,12 +126,12 @@ def train_log(acc, example_ct, epoch, lr):
     wandb.log({"epoch": epoch, "acc": acc, "lr":lr}, step=example_ct)
     print(f"Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}")
     
-
-if __name__ == "__main__":
+    
+def main_train_best_params():
     
     run_name = "train_best_params_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     wandb.init(project="bussiness_uab", 
-               name=run_name)
+            name=run_name)
     
     print("# --------------------------------------------------")
     print("Starting training best parameters for the model...")
@@ -179,5 +179,9 @@ if __name__ == "__main__":
     train(model, train_loader, criterion, optimizer, scheduler)
 
     print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
-    
+        
     wandb.finish()
+    
+
+if __name__ == "__main__":
+    main_train_best_params()

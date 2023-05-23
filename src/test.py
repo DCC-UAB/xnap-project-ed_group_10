@@ -1,13 +1,16 @@
 import wandb
 import torch
+import config
 
-def test(model, test_loader, device="cuda", save:bool= True):
+
+def test(model, test_loader, save:bool = True):
     
     # Run the model on some test examples
     with torch.no_grad():
+        
         correct, total = 0, 0
         for images, labels in test_loader:
-            images, labels = images.to(device), labels.to(device)
+            images, labels = images.to(config.device), labels.to(config.device)
             outputs = model(images)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
@@ -17,7 +20,7 @@ def test(model, test_loader, device="cuda", save:bool= True):
               f"test images: {correct / total:%}")
         
         wandb.log({"test_accuracy": correct / total})
-        
+
 
     if save:
         
@@ -34,3 +37,4 @@ def test(model, test_loader, device="cuda", save:bool= True):
                           dynamic_axes={'input': {0: 'batch_size'},  # variable length axes
                                         'output': {0: 'batch_size'}})
         wandb.save("model.onnx")
+        print("Model saved")

@@ -15,7 +15,7 @@ from einops import rearrange
 import fasttext
 import fasttext.util
 
-from models.conTextTransformer import conTextTransformer
+from models.conTextTransformer import ConTextTransformer
 from data.dataloader import *
 
 
@@ -33,7 +33,7 @@ def make(config):
     test_loader = make_loader(train=False)
 
     # Make the model
-    model = conTextTransformer(
+    model = ConTextTransformer(
         image_size=config.image_size,
         num_classes=config.num_classes,
         channels=config.channels,
@@ -47,12 +47,15 @@ def make(config):
     criterion = nn.CrossEntropyLoss()
     
     params_to_update = []
-    for name, param in model.named_parameters():
+    for _, param in model.named_parameters():
         if param.requires_grad == True:
             params_to_update.append(param)
     optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+    
+    # The scheduler will update the learning rate after every epoch to achieve a better convergence
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
         
-    return model, train_loader, test_loader, criterion, optimizer
+    return model, train_loader, test_loader, criterion, optimizer, scheduler
 
 
 def context_inference(img_filename, OCR_tokens):
