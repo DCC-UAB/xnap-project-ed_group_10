@@ -1,4 +1,3 @@
-import wandb
 import torch
 import torch.nn 
 import torchvision
@@ -17,6 +16,7 @@ import fasttext.util
 
 from models.conTextTransformer import ConTextTransformer
 from data.dataloader import *
+import config
 
 
 def make_loader(train=True):
@@ -26,7 +26,7 @@ def make_loader(train=True):
     return loader
 
 
-def make(config):
+def make():
     
     # Make the data
     train_loader = make_loader(train=True)
@@ -58,9 +58,8 @@ def make(config):
     return model, train_loader, test_loader, criterion, optimizer, scheduler
 
 
-def context_inference(img_filename, OCR_tokens):
+def context_inference(model, img_filename, OCR_tokens):
     
-    fasttext.util.download_model('en', if_exists='ignore')  # English
     fasttext_model = fasttext.load_model('cc.en.300.bin')
     
     img_transforms = torchvision.transforms.Compose([
@@ -78,5 +77,5 @@ def context_inference(img_filename, OCR_tokens):
     for i,w in enumerate(OCR_tokens):
         text[0,i,:] = fasttext_model.get_word_vector(w)
 
-    output = F.softmax(model(img.to(device), torch.tensor(text).to(device)), dim=1)
+    output = F.softmax(model(img.to(config.device), torch.tensor(text).to(config.device)), dim=1)
     return output.cpu().detach().numpy()
