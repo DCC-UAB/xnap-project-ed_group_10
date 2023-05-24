@@ -28,6 +28,7 @@ def test(test_loader, save=False, run_name=None):
     # Run the model on some test examples
     with torch.no_grad():
         correct, total = 0, 0
+        sum_loss = 0
         for data_img, data_txt, txt_mask, target in test_loader:
             data_img = data_img.to(config.device)
             data_txt = data_txt.to(config.device)
@@ -36,6 +37,7 @@ def test(test_loader, save=False, run_name=None):
             criterion = nn.CrossEntropyLoss()
             output = model(data_img, data_txt, txt_mask)
             loss = criterion(output, target)
+            sum_loss += loss
             _, predicted = torch.max(output, dim=1)
             
             total += target.size(0)
@@ -45,6 +47,7 @@ def test(test_loader, save=False, run_name=None):
               f"test images: {correct / total:%}\n")
         
         acc = correct / total
+        mean_loss = sum_loss / total
         threshold = 0.7
         
         if acc < threshold:
@@ -55,7 +58,7 @@ def test(test_loader, save=False, run_name=None):
                 wait_duration=timedelta(minutes=10)
             )
         
-        wandb.log({"test_accuracy": acc})
+        wandb.log({"test_accuracy": acc, "test_loss": mean_loss})
         
     with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
         f.write("Test - Accuracy: {}\n".format(acc))
