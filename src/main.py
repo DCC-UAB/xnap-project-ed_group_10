@@ -26,18 +26,19 @@ torch.manual_seed(hash("by removing stochasticity") % 2**32 - 1)
 torch.cuda.manual_seed_all(hash("so runs are repeatable") % 2**32 - 1)
 
 
-def model_pipeline(do_train=True, do_test=True, do_inference=True) -> nn.Module:
+def model_pipeline(do_train=True, do_test=True, do_inference=True, 
+                   run_name="main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) -> nn.Module:
     
     # make the model, data, and optimization problem
     model, train_loader, test_loader, criterion, optimizer, scheduler = make()
 
     if do_train:
         # and use them to train the model
-        train(model, train_loader, criterion, optimizer, scheduler)
+        train(model, train_loader, criterion, optimizer, scheduler, run_name)
 
     if do_test:
         # and test its final performance
-        test(model, test_loader)
+        test(model, test_loader, run_name)
         
     if do_inference:
         # and test its final performance
@@ -92,8 +93,14 @@ def main():
                notes=None,
                name=run_name,
                config=cfg)
-            
-    model = model_pipeline()
+    
+    os.makedirs(os.path.join("./results", run_name), exist_ok=True)
+    
+    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+        for key, value in cfg.items():
+            f.write("{}: {}\n".format(key, value))
+
+    model_pipeline(run_name=run_name)
 
     time_end = time.time()
     print("Total execution time:", time_end - time_start)

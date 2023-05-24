@@ -8,7 +8,6 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sn
 
 
 def show_batch(batch):
@@ -45,28 +44,24 @@ def show_batch_with_predictions_and_confidence(batch, model, device="cuda"):
     print('confidence:', confidence)
     
     
-def show_loss(loss_history):
+def make_loss_plot(loss_history, path):
     plt.figure(figsize=(10, 5))
     plt.plot(loss_history)
     plt.xlabel('Batches')
     plt.ylabel('Loss')
     plt.title('Training loss')
-    plt.show()
+    plt.savefig(path)
+    plt.close()
     
     
-def show_accuracy(accuracy_history):
+def make_accuracy_plot(accuracy_history, path):
     plt.figure(figsize=(10, 5))
     plt.plot(accuracy_history)
     plt.xlabel('Batches')
     plt.ylabel('Accuracy')
     plt.title('Training accuracy')
-    plt.show()
-    
-    
-def show_confusion_matrix(confusion_matrix):
-    df_cm = pd.DataFrame(confusion_matrix, index = [i for i in "0123456789"], columns = [i for i in "0123456789"])
-    plt.figure(figsize = (10,7))
-    sn.heatmap(df_cm, annot=True)
+    plt.savefig(path)
+    plt.close()
     
     
 def show_image(image):

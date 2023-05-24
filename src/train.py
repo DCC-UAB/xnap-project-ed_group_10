@@ -7,9 +7,10 @@ import torchvision
 import os
 import sys
 import pickle as pkl
-from torchviz import make_dot
+import torchviz
 
 import config
+import utils.utils_visualizations as utils_visualizations
 
 
 def train_epoch(model, optimizer, data_loader, loss_history):
@@ -94,13 +95,14 @@ def train_log(acc, example_ct, epoch, loss, lr):
     print(f"\nTRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
     
 
-def train(model, train_loader, criterion, optimizer, scheduler):
+def train(model, train_loader, criterion, optimizer, scheduler, run_name):
     
     # Tell wandb to watch what the model gets up to: gradients, weights, and more!
     wandb.watch(model, criterion, log="all", log_freq=10)
 
     # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
+    acc_history = []
     best_acc = 0.
     example_ct = 0  # number of examples seen
     
@@ -111,22 +113,33 @@ def train(model, train_loader, criterion, optimizer, scheduler):
         iter_in_epoch = train_epoch(model, optimizer, train_loader, train_loss_history)
         acc, loss = evaluate(model, train_loader, test_loss_history)
         
+        acc_history.append(acc)
+        
         example_ct += len(train_loader.dataset)
         
         # Save the model with the best accuracy
         if acc>best_acc: 
             torch.save(model.state_dict(), './src/models/all_best_params.pth')
             wandb.save("all_best_params.pth")
-            
-            # # Exportar un plot de la estructura de la red
-            
-            # model.named_parameters()))
-            # vis_graph.format = 'png'
-            # vis_graph.directory = './src/models'
-            # # vis_graph.view()
+                        
+            # Export a plot of the model structure
+            model_graph = torchviz.make_dot(model, params=dict(model.named_parameters()))
+            model_graph.format = 'png'
+            model_graph.render('./src/models/model_structure', view=False)
             
             best_acc = acc
             
         scheduler.step()
         
         train_log(acc, example_ct, epoch, loss, optimizer.param_groups[0]['lr'])
+        
+        
+    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+        f.write("Train - Best accuracy: {}\n".format(best_acc))
+        f.write("Train - Train mean loss: {}\n".format(np.mean(train_loss_history)))
+        f.write("Train - Test mean loss: {}\n".format(np.mean(test_loss_history)))
+        
+        
+    utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")
+    utils_visualizations.make_loss_plot(test_loss_history, "./results/" + run_name + "/test_loss.png")
+    utils_visualizations.make_acc_plot(acc_history, "./results/" + run_name + "/accuracy.png")

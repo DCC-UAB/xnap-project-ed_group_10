@@ -26,7 +26,9 @@ pretrained_weights = 'bert-base-uncased'
 pretrained_backbone = True
 max_num_words = 64
 pretained_model = "resnet50"
-text_model = "ocr"
+text_model = "fasttext"
+dropout = 0
+bert_model = "bert-base-uncased"
 
 # Training
 lr = 1e-4

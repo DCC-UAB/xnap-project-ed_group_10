@@ -5,9 +5,10 @@ from wandb import AlertLevel
 from datetime import timedelta
 import torch.nn.functional as F
 import torch.nn as nn
+import os
 
 
-def test(model, test_loader, save:bool = False):
+def test(model, test_loader, save=False, run_name=None):
     
     # Run the model on some test examples
     with torch.no_grad():
@@ -40,7 +41,10 @@ def test(model, test_loader, save:bool = False):
                 wait_duration=timedelta(minutes=10)
             )
         
-        wandb.log({"test_accuracy": correct / total})
+        wandb.log({"test_accuracy": acc})
+        
+    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+        f.write("Test - Accuracy: {}\n".format(acc))
 
 
     if save:
