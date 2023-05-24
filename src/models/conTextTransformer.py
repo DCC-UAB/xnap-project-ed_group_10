@@ -15,7 +15,7 @@ class ConTextTransformer(nn.Module):
     def __init__(self, *, image_size, num_classes, dim, depth, heads, mlp_dim, channels=3):
         super().__init__()
         
-        resnet50 = torchvision.models.resnet50(pretrained=True) #Carregar el model pre-entrenat resnet50
+        resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.DEFAULT) #Carregar el model pre-entrenat resnet50
         modules=list(resnet50.children())[:-2] #Agafar tots els layers menys els dos últims
         self.resnet50=nn.Sequential(*modules) #Crear un model amb els layers anteriors
         for param in self.resnet50.parameters(): #Congelar els paràmetres del model

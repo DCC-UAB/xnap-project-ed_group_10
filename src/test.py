@@ -6,6 +6,7 @@ from datetime import timedelta
 import torch.nn.functional as F
 import torch.nn as nn
 from models.conTextTransformer import ConTextTransformer
+import os
 
 
 def test(test_loader, save=False, run_name=None):

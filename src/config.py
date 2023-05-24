@@ -25,17 +25,16 @@ dropout = 0.1
 pretrained_weights = 'bert-base-uncased'
 pretrained_backbone = True
 max_num_words = 64
-pretained_model = "resnet50"
+pretrained_model = "resnet50"
 text_model = "fasttext"
-dropout = 0
+dropout_rate = 0
 bert_model = "bert-base-uncased"
 
 # Training
 lr = 1e-4
-epochs = 2
+epochs = 1
 patience = 5
 early_stopping = True
 save_dir = 'models/saved_models/'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 gamma = 0.1
-data_augmentation = False

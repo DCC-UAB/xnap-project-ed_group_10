@@ -122,10 +122,10 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
             torch.save(model.state_dict(), './src/models/all_best_params.pth')
             wandb.save("all_best_params.pth")
                         
-            # Export a plot of the model structure
-            model_graph = torchviz.make_dot(model, params=dict(model.named_parameters()))
-            model_graph.format = 'png'
-            model_graph.render('./src/models/model_structure', view=False)
+            # # Export a plot of the model structure
+            # model_graph = torchviz.make_dot(model, params=dict(model.named_parameters()))
+            # model_graph.format = 'png'
+            # model_graph.render('./src/models/model_structure', view=False)
             
             best_acc = acc
             
@@ -142,4 +142,4 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         
     utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")
     utils_visualizations.make_loss_plot(test_loss_history, "./results/" + run_name + "/test_loss.png")
-    utils_visualizations.make_acc_plot(acc_history, "./results/" + run_name + "/accuracy.png")
+    utils_visualizations.make_accuracy_plot(acc_history, "./results/" + run_name + "/accuracy.png")

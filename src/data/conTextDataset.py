@@ -32,7 +32,6 @@ class ConTextDataset(Dataset):
         
         self.dim_fasttext = self.fasttext.get_dimension()
         self.max_num_words = config.max_num_words
-        self.data_augmentation = config.data_augmentation
 
 
     def __len__(self):
