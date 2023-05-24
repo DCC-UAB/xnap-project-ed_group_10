@@ -10,9 +10,12 @@ from torch.utils.data import Dataset
 import fasttext
 import fasttext.util
 
+import config
 
 class ConTextDataset(Dataset):
-    def __init__(self, json_file, root_dir, root_dir_txt, train=True, transform=None):
+    def __init__(self, json_file, root_dir, root_dir_txt, 
+                 train=True, transform=None):
+        
         with open(json_file) as f:
             data = json.load(f)
         self.train = train
@@ -26,8 +29,10 @@ class ConTextDataset(Dataset):
 
         fasttext.util.download_model('en', if_exists='ignore')  # English
         self.fasttext = fasttext.load_model('cc.en.300.bin')
+        
         self.dim_fasttext = self.fasttext.get_dimension()
-        self.max_num_words = 64
+        self.max_num_words = config.max_num_words
+        self.data_augmentation = config.data_augmentation
 
 
     def __len__(self):

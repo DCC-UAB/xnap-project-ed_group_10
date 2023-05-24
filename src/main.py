@@ -48,18 +48,18 @@ def model_pipeline(do_train=True, do_test=True, do_inference=True) -> nn.Module:
 def main():
     
     print("\n# --------------------------------------------------")
-    print("Starting Test and Test of the moodel...")
-    print("Device:", config.device)
-    print("Number of epochs:", config.epochs)
-    print("Batch size:", config.batch_size)
-    print("Learning rate:", config.lr)
-    print("Image size:", config.image_size)
-    print("Number of classes:", config.num_classes)
-    print("Number of channels:", config.channels)
-    print("Dimension:", config.dim)
-    print("Depth:", config.depth)
-    print("Number of heads:", config.heads)
-    print("MLP dimension:", config.mlp_dim)
+    print("| Starting Test and Test of the moodel...")
+    print("| Device:", config.device)
+    print("| Number of epochs:", config.epochs)
+    print("| Batch size:", config.batch_size)
+    print("| Learning rate:", config.lr)
+    print("| Image size:", config.image_size)
+    print("| Number of classes:", config.num_classes)
+    print("| Number of channels:", config.channels)
+    print("| Dimension:", config.dim)
+    print("| Depth:", config.depth)
+    print("| Number of heads:", config.heads)
+    print("| MLP dimension:", config.mlp_dim)
     print("# --------------------------------------------------\n")
     
     # + ----------------------
@@ -77,10 +77,12 @@ def main():
         learning_rate=config.lr,
         dataset="Business Dataset",
         architecture="Context Transformer",
-        device=config.device
+        device=config.device,
+        data_augmentation=config.data_augmentation,
     )
     
     wandb.init(project="bussiness_uab", 
+               notes=None,
                name=run_name,
                config=cfg)
             

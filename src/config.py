@@ -24,12 +24,14 @@ dim_feedforward = 3072
 dropout = 0.1
 pretrained_weights = 'bert-base-uncased'
 pretrained_backbone = True
+max_num_words = 64
 
 # Training
 lr = 1e-4
-epochs = 20
+epochs = 2
 patience = 5
 early_stopping = True
 save_dir = 'models/saved_models/'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 gamma = 0.1
+data_augmentation = False

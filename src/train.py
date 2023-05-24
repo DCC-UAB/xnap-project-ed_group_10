@@ -7,6 +7,7 @@ import torchvision
 import os
 import sys
 import pickle as pkl
+from torchviz import make_dot
 
 import config
 
@@ -36,6 +37,8 @@ def train_epoch(model, optimizer, data_loader, loss_history):
                 ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                 '{:6.4f}'.format(loss.item()))
             loss_history.append(loss.item())
+            
+    return i
 
     
 def evaluate(model, data_loader, loss_history):
@@ -87,9 +90,9 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
     return loss
 
 
-def train_log(acc, example_ct, epoch, lr):
+def train_log(acc, example_ct, epoch, loss, lr):
     # Where the magic happens
-    wandb.log({"epoch": epoch, "train_accuracy": acc, "lr":lr}, step=example_ct)
+    wandb.log({"epoch": epoch, "train_accuracy": acc, "loss": loss, "lr":lr}, step=example_ct)
     print(f"\nTRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
     
 
@@ -107,7 +110,7 @@ def train(model, train_loader, criterion, optimizer, scheduler):
     for epoch in range(1, config.epochs + 1):
         
         print('\nEpoch:', epoch)
-        train_epoch(model, optimizer, train_loader, train_loss_history)
+        iter_in_epoch = train_epoch(model, optimizer, train_loader, train_loss_history)
         acc = evaluate(model, train_loader, test_loss_history)
         
         example_ct += len(train_loader.dataset)
@@ -116,9 +119,20 @@ def train(model, train_loader, criterion, optimizer, scheduler):
         if acc>best_acc: 
             torch.save(model.state_dict(), './src/models/all_best_params.pth')
             wandb.save("all_best_params.pth")
+            
+            # Exportar un plot de la estructura de la red
+            x = torch.randn(1, 3, 224, 224).requires_grad_(True)
+            y = model(x)
+            vis_graph = make_dot(y, params=dict(model.named_parameters()))
+            vis_graph.format = 'png'
+            vis_graph.directory = './src/models'
+            vis_graph.view()
+            
             best_acc = acc
             
         scheduler.step()
         
+        train_loss_history_mean = np.mean(train_loss_history[-iter_in_epoch:])
+        
         # Log metrics to visualize performance        
-        train_log(acc, example_ct, epoch, optimizer.param_groups[0]['lr'])
+        train_log(acc, example_ct, epoch, train_loss_history_mean, optimizer.param_groups[0]['lr'])
