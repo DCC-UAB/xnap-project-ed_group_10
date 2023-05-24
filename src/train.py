@@ -103,6 +103,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
     # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
     acc_history = []
+    best_acc = 0
     best_loss = np.inf
     example_ct = 0  # number of examples seen
     
@@ -114,6 +115,8 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         acc, loss = evaluate(model, train_loader, test_loss_history)
         
         acc_history.append(acc)
+        if acc>best_acc: 
+            best_acc = acc
         
         example_ct += len(train_loader.dataset)
         
@@ -127,19 +130,19 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
             # model_graph.format = 'png'
             # model_graph.render('./src/models/model_structure', view=False)
             
-            best_acc = acc
+            best_loss = loss
             
         scheduler.step()
         
         train_log(acc, example_ct, epoch, loss, optimizer.param_groups[0]['lr'])
         
         
-    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+    with open("./results/" + run_name + "/config.txt", "w") as f:
         f.write("Train - Best accuracy: {}\n".format(best_acc))
+        f.write("Train - Best loss: {}\n".format(best_loss))
         f.write("Train - Train mean loss: {}\n".format(np.mean(train_loss_history)))
         f.write("Train - Test mean loss: {}\n".format(np.mean(test_loss_history)))
         
         
     utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")
-    utils_visualizations.make_loss_plot(test_loss_history, "./results/" + run_name + "/test_loss.png")
     utils_visualizations.make_accuracy_plot(acc_history, "./results/" + run_name + "/accuracy.png")

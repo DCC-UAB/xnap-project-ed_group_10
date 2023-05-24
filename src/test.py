@@ -60,8 +60,9 @@ def test(test_loader, save=False, run_name=None):
         
         wandb.log({"test_accuracy": acc, "test_loss": mean_loss})
         
-    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+    with open("./results" + run_name + "config.txt", "w") as f:
         f.write("Test - Accuracy: {}\n".format(acc))
+        f.write("Test - Loss: {}\n".format(mean_loss))
 
 
     if save:

@@ -94,9 +94,9 @@ def main():
                name=run_name,
                config=cfg)
     
-    os.makedirs(os.path.join("./results", run_name), exist_ok=True)
+    os.makedirs("./results/" + run_name, exist_ok=True)
     
-    with open(os.path.join("./results", run_name, "config.txt"), "w") as f:
+    with open("./results/" + run_name + "/config.txt", "w") as f:
         f.write("Date: {}\n".format(datetime.datetime.now().strftime("%Y %m %d, %H %M %S")))
         for key, value in cfg.items():
             f.write("{}: {}\n".format(key, value))
