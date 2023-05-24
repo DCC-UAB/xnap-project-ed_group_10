@@ -101,7 +101,7 @@ def train(model, train_loader, criterion, optimizer, scheduler):
 
     # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
-    best_acc = 0.
+    best_loss = np.inf
     example_ct = 0  # number of examples seen
     
     # Train the model that has the best hyperparameters
@@ -114,7 +114,7 @@ def train(model, train_loader, criterion, optimizer, scheduler):
         example_ct += len(train_loader.dataset)
         
         # Save the model with the best accuracy
-        if acc>best_acc: 
+        if loss<best_loss: 
             torch.save(model.state_dict(), './src/models/all_best_params.pth')
             wandb.save("all_best_params.pth")
             

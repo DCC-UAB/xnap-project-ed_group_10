@@ -37,7 +37,7 @@ def model_pipeline(do_train=True, do_test=True, do_inference=True) -> nn.Module:
 
     if do_test:
         # and test its final performance
-        test(model, test_loader)
+        test(test_loader)
         
     if do_inference:
         # and test its final performance
