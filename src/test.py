@@ -5,14 +5,27 @@ from wandb import AlertLevel
 from datetime import timedelta
 import torch.nn.functional as F
 import torch.nn as nn
-import os
+from models.conTextTransformer import ConTextTransformer
 
 
-def test(model, test_loader, save=False, run_name=None):
+def test(test_loader, save=False, run_name=None):
+        
+    model = ConTextTransformer(
+        image_size=config.image_size,
+        num_classes=config.num_classes,
+        channels=config.channels,
+        dim=config.dim,
+        depth=config.depth,
+        heads=config.heads, 
+        mlp_dim=config.mlp_dim
+    )
+    
+    model.load_state_dict(torch.load('./src/models/all_best_params.pth'))
+    model.to(config.device)
+    model.eval()
     
     # Run the model on some test examples
     with torch.no_grad():
-        
         correct, total = 0, 0
         for data_img, data_txt, txt_mask, target in test_loader:
             data_img = data_img.to(config.device)
