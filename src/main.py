@@ -8,6 +8,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 import time
+from beautifultable import BeautifulTable
 
 import config
 
@@ -49,18 +50,22 @@ def main():
     
     print("\n# --------------------------------------------------")
     print("| Starting Test and Test of the moodel...")
-    print("| Device:", config.device)
-    print("| Number of epochs:", config.epochs)
-    print("| Batch size:", config.batch_size)
-    print("| Learning rate:", config.lr)
-    print("| Image size:", config.image_size)
-    print("| Number of classes:", config.num_classes)
-    print("| Number of channels:", config.channels)
-    print("| Dimension:", config.dim)
-    print("| Depth:", config.depth)
-    print("| Number of heads:", config.heads)
-    print("| MLP dimension:", config.mlp_dim)
     print("# --------------------------------------------------\n")
+    
+    table = BeautifulTable()
+    table.column_headers = ["Parameter", "Value"]
+    table.append_row(["Device", config.device])
+    table.append_row(["Number of epochs", config.epochs])
+    table.append_row(["Batch size", config.batch_size])
+    table.append_row(["Learning rate", config.lr])
+    table.append_row(["Image size", config.image_size])
+    table.append_row(["Number of classes", config.num_classes])
+    table.append_row(["Number of channels", config.channels])
+    table.append_row(["Dimension", config.dim])
+    table.append_row(["Depth", config.depth])
+    table.append_row(["Number of heads", config.heads])
+    table.append_row(["MLP dimension", config.mlp_dim])
+    print(table)
     
     # + ----------------------
     # | Train and Test the model
@@ -77,6 +82,8 @@ def main():
         learning_rate=config.lr,
         dataset="Business Dataset",
         architecture="Context Transformer",
+        pretained_model=config.pretrained_model,
+        text_model=config.text_model,
         device=config.device,
         data_augmentation=config.data_augmentation,
     )

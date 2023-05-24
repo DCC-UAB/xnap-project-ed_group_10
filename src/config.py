@@ -25,6 +25,8 @@ dropout = 0.1
 pretrained_weights = 'bert-base-uncased'
 pretrained_backbone = True
 max_num_words = 64
+pretained_model = "resnet50"
+text_model = "ocr"
 
 # Training
 lr = 1e-4
