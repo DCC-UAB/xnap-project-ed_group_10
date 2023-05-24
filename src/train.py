@@ -91,7 +91,7 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
 
 def train_log(acc, example_ct, epoch, loss, lr):
     # Where the magic happens
-    wandb.log({"epoch": epoch, "train_accuracy": acc, "loss": loss, "lr":lr}, step=example_ct)
+    wandb.log({"epoch": epoch, "train_accuracy": acc, "train_loss": loss, "lr":lr}, step=example_ct)
     print(f"\nTRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
     
 
