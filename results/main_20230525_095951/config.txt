@@ -1,0 +1,10 @@
+Date: 2023 05 25, 10 00 01
+epochs: 1
+classes: 28
+batch_size: 16
+learning_rate: 0.0001
+dataset: Business Dataset
+architecture: Context Transformer
+pretained_model: inception
+text_model: fasttext
+device: cuda:0

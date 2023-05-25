@@ -8,7 +8,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 import time
-from beautifultable import BeautifulTable
+#from beautifultable import BeautifulTable
 
 import config
 
@@ -26,7 +26,7 @@ torch.manual_seed(hash("by removing stochasticity") % 2**32 - 1)
 torch.cuda.manual_seed_all(hash("so runs are repeatable") % 2**32 - 1)
 
 
-def model_pipeline(do_train=True, do_test=True, do_inference=True, 
+def model_pipeline(do_train=False, do_test=True, do_inference=True, 
                    run_name="main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) -> nn.Module:
     
     # make the model, data, and optimization problem
@@ -38,7 +38,7 @@ def model_pipeline(do_train=True, do_test=True, do_inference=True,
 
     if do_test:
         # and test its final performance
-        test(test_loader, run_name)
+        test(test_loader, run_name=run_name)
         
     if do_inference:
         # and test its final performance

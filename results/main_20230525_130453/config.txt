@@ -1,0 +1,4 @@
+Train - Best accuracy: 0.6807590126991272
+Train - Best loss: 1.1159113742150029
+Train - Train mean loss: 1.8238186565312473
+Train - Test mean loss: 1.1159113742150029

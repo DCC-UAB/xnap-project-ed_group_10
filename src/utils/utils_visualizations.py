@@ -55,6 +55,7 @@ def make_loss_plot(loss_history, path):
     
     
 def make_accuracy_plot(accuracy_history, path):
+    
     plt.figure(figsize=(10, 5))
     plt.plot(accuracy_history)
     plt.xlabel('Batches')

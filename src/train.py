@@ -69,7 +69,7 @@ def evaluate(model, data_loader, loss_history):
         '{:5}'.format(total_samples) + ' (' +
         '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-    return correct_samples / total_samples, avg_loss
+    return (correct_samples / total_samples).to('cpu').numpy(), avg_loss
 
 
 def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
@@ -92,7 +92,7 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
 def train_log(acc, example_ct, epoch, loss, lr):
     # Where the magic happens
     wandb.log({"epoch": epoch, "train_accuracy": acc, "train_loss": loss, "lr":lr}, step=example_ct)
-    print(f"\nTRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
+    print(f"TRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
     
 
 def train(model, train_loader, criterion, optimizer, scheduler, run_name):
@@ -145,4 +145,3 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         
         
     utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")
-    utils_visualizations.make_accuracy_plot(acc_history, "./results/" + run_name + "/accuracy.png")

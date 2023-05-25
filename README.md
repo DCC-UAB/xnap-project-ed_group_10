@@ -14,6 +14,16 @@ Classify businesses on street view images, combining textual and visual features
 
 Transformer (CNN and Word Embeddings)
 
+### Different CNN pretrained models used
+- ResNet50 (Residual Network) is a variant of the ResNet (Residual Network) architecture consisting of 50 layers. ResNet was introduced to address the problem of performance decay as more layers are added to a deep neural network. It uses residual blocks that allow direct information flow across connection hops, making it easier to train deeper networks and improving accuracy.
+
+- SE_ResNeXt101 (Residual Network with Next) is an extension to the ResNet of 101 layers that focuses on the idea of "cardinal grouping" to further improve performance. Rather than having a single path of information within each residual block, ResNeXt uses multiple paths, called "transformation paths," which capture different forms of information and allow the residual blocks to be richer and more expressive. These transformation paths are realized by grouping the outputs of the previous block into multiple channels, which is known as "cardinality". Cardinality refers to the number of channels in each grouping. Furthermore, it combines the ideas of ResNet residual blocks with Squeeze-and-Excitation (SE) modules. SE modules were introduced to improve the network's attention span to specific features and highlight relevant information. These modules use a "squeeze" operation to reduce the dimension of the feature maps and an "excitation" operation to model the interdependencies between the channels and recalibrate them based on their importance.
+
+### Different Word-Embedding pretrained models used
+- FastText is a model developed by Facebook AI Research that is based on vector representations of words (word embeddings). Unlike other embedding models, such as Word2Vec, FastText represents each word as a sum of its subword embeddings. This allows capturing morphological information and the relationship between compound words and their components. In addition, FastText includes a linear classification layer that allows you to perform text classification tasks. Their characteristics are: Model subwords and morphological relationships. It is efficient in terms of memory and training speed. Suitable for the classification of short texts and languages with limited resources. It does not capture the order of words in a sentence.
+
+- BERT (Bidirectional Encoder Representations from Transformers) is a model developed by Google that is based on the Transformer architecture, which allows capturing long-range relationships in a text. Unlike traditional NLP approaches that process text sequentially, BERT uses a pretrained language model that learns bidirectional representations of words. This means that BERT considers the context both to the left and to the right of a word in a sentence. Their characteristics are: Models the bidirectional context of words in a sentence. Captures long-range relationships and syntactic dependencies. It is capable of performing natural language processing tasks without the need for additional fine-tuning. It requires more computational resources and training time than FastText.
+
 ## Task
 
 Fine-grained Classification
