@@ -23,7 +23,9 @@ class Dataloader():
 
         # data_transforms_train --> This is the data augmentation and normalization we will use for the training data
         # data_transforms_test  --> This is the normalization we will use for the validation data
-        
+
+
+
         self.data_transforms_train = torchvision.transforms.Compose([
                 torchvision.transforms.RandomResizedCrop(config.image_size),
                 torchvision.transforms.RandomHorizontalFlip(),
@@ -39,7 +41,7 @@ class Dataloader():
                 torchvision.transforms.Normalize([0.485, 0.456, 0.406], 
                                                  [0.229, 0.224, 0.225])
             ])
-        
+
     def get_loaders(self, train_test=None):
         
         if train_test is None:

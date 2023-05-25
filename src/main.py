@@ -8,7 +8,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 import time
-from beautifultable import BeautifulTable
+#from beautifultable import BeautifulTable
 
 import config
 

@@ -7,6 +7,7 @@ import torch.nn as nn
 import torchvision
 from einops import rearrange
 from transformers import BertModel
+import timm
 
 import config
 
@@ -15,10 +16,17 @@ class ConTextTransformer(nn.Module):
     def __init__(self, *, image_size, num_classes, dim, depth, heads, mlp_dim, channels=3):
         super().__init__()
         
-        resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.DEFAULT) #Carregar el model pre-entrenat resnet50
-        modules=list(resnet50.children())[:-2] #Agafar tots els layers menys els dos últims
-        self.resnet50=nn.Sequential(*modules) #Crear un model amb els layers anteriors
-        for param in self.resnet50.parameters(): #Congelar els paràmetres del model
+        if config.pretrained_model == 'resnet50':
+            model = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.DEFAULT) #Carregar el model pre-entrenat resnet50
+            modules=list(model.children())[:-2] #Agafar tots els layers menys els dos últims
+            
+        elif config.pretrained_model == 'seresnext101_32x4d':
+            model = timm.create_model('seresnext101_32x4d', pretrained=True)
+            modules=list(model.children())[:-2] #Agafar tots els layers menys els dos últims
+        
+        self.model=nn.Sequential(*modules) #Crear un model amb els layers anteriors
+
+        for param in self.model.parameters(): #Congelar els paràmetres del model
             param.requires_grad = False
             
         self.num_cnn_features = 64  # 8x8 Num característiques de la CNN
@@ -52,7 +60,8 @@ class ConTextTransformer(nn.Module):
         )
 
     def forward(self, img, txt, mask=None):
-        x = self.resnet50(img)
+        x = self.model(img)
+
         x = rearrange(x, 'b d h w -> b (h w) d')
         x = self.cnn_feature_to_embedding(x)
 
