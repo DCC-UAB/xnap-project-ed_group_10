@@ -14,6 +14,11 @@ Classify businesses on street view images, combining textual and visual features
 
 Transformer (CNN and Word Embeddings)
 
+### Different CNN pretrained models used
+- ResNet50 (Residual Network) is a variant of the ResNet (Residual Network) architecture consisting of 50 layers. ResNet was introduced to address the problem of performance decay as more layers are added to a deep neural network. It uses residual blocks that allow direct information flow across connection hops, making it easier to train deeper networks and improving accuracy.
+
+- SE_ResNeXt101 (Residual Network with Next) is an extension to the ResNet of 101 layers that focuses on the idea of "cardinal grouping" to further improve performance. Rather than having a single path of information within each residual block, ResNeXt uses multiple paths, called "transformation paths," which capture different forms of information and allow the residual blocks to be richer and more expressive. These transformation paths are realized by grouping the outputs of the previous block into multiple channels, which is known as "cardinality". Cardinality refers to the number of channels in each grouping. Furthermore, it combines the ideas of ResNet residual blocks with Squeeze-and-Excitation (SE) modules. SE modules were introduced to improve the network's attention span to specific features and highlight relevant information. These modules use a "squeeze" operation to reduce the dimension of the feature maps and an "excitation" operation to model the interdependencies between the channels and recalibrate them based on their importance.
+
 ## Task
 
 Fine-grained Classification
