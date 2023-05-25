@@ -91,5 +91,6 @@ def hyperparameter_tuning():
     print("--------------------------------------------------------------------------------------------")
     print("\n\n\n")
     
-def main():
+
+if __name__ == "__main__":
     hyperparameter_tuning()
