@@ -51,15 +51,18 @@ def evaluate(model, data_loader, loss_history):
     
     with torch.no_grad():
         for data_img, data_txt, txt_mask, target in data_loader:
+            
             data_img = data_img.to(config.device)
             data_txt = data_txt.to(config.device)
             txt_mask = txt_mask.to(config.device)
             target = target.to(config.device)
-            output = F.log_softmax(model(data_img, data_txt, txt_mask), dim=1)
-            loss = F.nll_loss(output, target, reduction='sum')
+            
+            criterion = nn.CrossEntropyLoss()
+            output = model(data_img, data_txt, txt_mask)
+            loss = criterion(output, target)
             _, pred = torch.max(output, dim=1)
 
-            total_loss += loss.item()
+            total_loss += loss
             correct_samples += pred.eq(target).sum()
 
     avg_loss = total_loss / total_samples

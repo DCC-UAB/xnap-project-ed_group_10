@@ -1,0 +1,32 @@
++ --------------------
++ TO DO 
++ --------------------
+
+- [ ]  Bert model
+- [ ]  Try new dataset
+- [ ]  Aplicar Hyperparameters Tunning
+- [ ]  Try to normalize the data
+- [ ]  Provar de cambiar les últimes capes de la xarxa
+
++ --------------------
++ TO ASK 
++ --------------------
+
+- Com cambiaries les ultimes capes de la xarxa?
+- Utilitzem un altre dataset?
+- Millores que faries?
+- Tema loss - Diferents escales - Es pot comparar la loss de epoques de train amb la loss mitjana de test de imatges?
+- Ara tenim learning rate anaptatiu. Provar estatic?
+
++ --------------------
++ TO EXPLAIN
++ --------------------
+
+- Adam optimizer és el millor ja que és el que utilitza el descens del gradient estocàstic
+- Hem provat AdamW però no ha donat bons resultats
+
+- Estructura - Començar per main i anar pas a pas
+- Models
+- Wandb
+- Hyperparameters Tunning
+- Readme
