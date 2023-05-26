@@ -1,11 +1,11 @@
 import optuna
 import wandb
 import torch.nn as nn
-
+import torch 
+import numpy as np
 import config
 from models.conTextTransformer import ConTextTransformer
-from data.dataloader import *
-
+from data.dataloader import Dataloader
 import torch.nn.functional as F
 
 def train_epoch(model, optimizer, data_loader, loss_history):
