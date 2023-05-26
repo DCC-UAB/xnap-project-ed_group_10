@@ -24,6 +24,16 @@ class ConTextTransformer(nn.Module):
             model = timm.create_model('seresnext101_32x4d', pretrained=True)
             modules=list(model.children())[:-2] #Agafar tots els layers menys els dos últims
         
+        elif config.pretrained_model == 'shufflenet':
+            model = torchvision.models.shufflenet_v2_x1_0(torchvision.models.ShuffleNet_V2_X1_0_Weights.DEFAULT) #Carregar el model pre-entrenat resnet50
+            modules = list(model.children())[:-1]  # Obtener todas las capas excepto la última
+            self.shufflenet = nn.Sequential(*modules)   
+            self.dim_cnn_features = 1024  # Dimensión de las características de la CNN
+
+            # Añadir capas adicionales para ajustar el tamaño de salida
+            self.adapt_conv = nn.Conv2d(self.dim_cnn_features, 2048, kernel_size=3)  # Capa convolucional para ajustar el tamaño
+            self.adapt_pool = nn.AdaptiveAvgPool2d((8, 8))
+
         self.model=nn.Sequential(*modules) #Crear un model amb els layers anteriors
 
         for param in self.model.parameters(): #Congelar els paràmetres del model
@@ -61,6 +71,12 @@ class ConTextTransformer(nn.Module):
 
     def forward(self, img, txt, mask=None):
         x = self.model(img)
+
+        if config.pretrained_model == 'shufflenet':
+            x = self.shufflenet(img)
+            x = self.adapt_conv(x)
+            x = self.adapt_pool(x)
+            #x = self.cnn_feature_to_embedding(x.view(x.size(0), -1))
 
         x = rearrange(x, 'b d h w -> b (h w) d')
         x = self.cnn_feature_to_embedding(x)

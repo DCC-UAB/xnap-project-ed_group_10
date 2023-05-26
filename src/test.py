@@ -6,7 +6,6 @@ from datetime import timedelta
 import torch.nn.functional as F
 import torch.nn as nn
 from models.conTextTransformer import ConTextTransformer
-import os
 
 
 def test(test_loader, save=False, run_name=None):
@@ -60,7 +59,7 @@ def test(test_loader, save=False, run_name=None):
         
         wandb.log({"test_accuracy": acc, "test_loss": mean_loss})
         
-    with open("./results/" + run_name + "/config.txt", "w") as f:
+    with open("./results/" + run_name + "/config.txt", "a") as f:
         f.write("Test - Accuracy: {}\n".format(acc))
         f.write("Test - Loss: {}\n".format(mean_loss))
 

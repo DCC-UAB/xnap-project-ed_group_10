@@ -1,8 +1,5 @@
-import wandb
 import torch
 import config
-import pickle as pkl
-import torchvision
 from utils.utils import context_inference
 import numpy as np
 from models.conTextTransformer import ConTextTransformer
@@ -59,8 +56,8 @@ def inference_test():
     
     img = './data/Summertown-1080x675.jpg'
 
-    from IPython.display import Image as ShowImage
-    ShowImage(img)
+    import matplotlib.pyplot as plt
+    plt.imshow(plt.imread(img))
 
     OCR_tokens = [] # Let's imagine our OCR model does not recognize any text
 
