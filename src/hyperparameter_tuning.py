@@ -136,12 +136,18 @@ def objective(trial):
     mlp_dim = trial.suggest_int("mlp_dim", 256, 1024, log=True)
     depth = trial.suggest_int("depth", 1, 3)
     heads = trial.suggest_int("heads", 2, 6)
+    epochs = 5
 
     # Starting WandrB run.
     config = {"trial_lr": lr,
               "trial_mlp_dim": mlp_dim,
               "trial_depth": depth,
-              "trail_heads":heads
+              "trail_heads":heads,
+              "epochs":epochs,
+              "dataset":"base",
+              "architecture": "Context Transformer",
+              "pretrained_model":config.pretrained_model,
+              "text_model": config.text_model, 
               }
     
     run = wandb.init(project="bussiness_uab_optuna",
