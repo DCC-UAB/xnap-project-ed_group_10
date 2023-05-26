@@ -70,7 +70,7 @@ class ConTextTransformer(nn.Module):
         x += self.pos_embedding
 
         if config.text_model == 'bert':
-            txt_outputs = self.bert(txt)[0][:, 0]  # Obtener las representaciones del token CLS de BERT
+            txt_outputs,  = self.bert(txt)[0][:, 0]  # Obtener las representaciones del token CLS de BERT
             x2 = self.bert_feature_to_embedding(txt_outputs)
             x = torch.cat((x, x2), dim=1)
         elif config.text_model == 'fasttext':

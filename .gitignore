@@ -134,3 +134,5 @@ wandb
 # archivos con extension bin
 *.bin
 *.gz
+
+*.pth
