@@ -18,7 +18,7 @@ from inference import inference_test
 from utils.utils import *
 
 
-# Ensure deterministic behavior
+# Ensure deterministic behavior 
 torch.backends.cudnn.deterministic = True
 random.seed(hash("setting random seeds") % 2**32 - 1)
 np.random.seed(hash("improves reproducibility") % 2**32 - 1)
@@ -26,7 +26,7 @@ torch.manual_seed(hash("by removing stochasticity") % 2**32 - 1)
 torch.cuda.manual_seed_all(hash("so runs are repeatable") % 2**32 - 1)
 
 
-def model_pipeline(do_train=False, do_test=True, do_inference=True, 
+def model_pipeline(do_train=True, do_test=True, do_inference=True, 
                    run_name="main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) -> nn.Module:
     
     # make the model, data, and optimization problem
