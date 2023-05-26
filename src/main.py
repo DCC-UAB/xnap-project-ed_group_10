@@ -5,10 +5,7 @@ import datetime
 import numpy as np
 import torch
 import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
 import time
-#from beautifultable import BeautifulTable
 
 import config
 
@@ -18,7 +15,7 @@ from inference import inference_test
 from utils.utils import *
 
 
-# Ensure deterministic behavior
+# Ensure deterministic behavior 
 torch.backends.cudnn.deterministic = True
 random.seed(hash("setting random seeds") % 2**32 - 1)
 np.random.seed(hash("improves reproducibility") % 2**32 - 1)
@@ -26,7 +23,7 @@ torch.manual_seed(hash("by removing stochasticity") % 2**32 - 1)
 torch.cuda.manual_seed_all(hash("so runs are repeatable") % 2**32 - 1)
 
 
-def model_pipeline(do_train=False, do_test=True, do_inference=True, 
+def model_pipeline(do_train=True, do_test=True, do_inference=True, 
                    run_name="main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) -> nn.Module:
     
     # make the model, data, and optimization problem
@@ -96,7 +93,7 @@ def main():
     
     os.makedirs("./results/" + run_name, exist_ok=True)
     
-    with open("./results/" + run_name + "/config.txt", "w") as f:
+    with open("./results/" + run_name + "/config.txt", "a") as f:
         f.write("Date: {}\n".format(datetime.datetime.now().strftime("%Y %m %d, %H %M %S")))
         for key, value in cfg.items():
             f.write("{}: {}\n".format(key, value))
