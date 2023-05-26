@@ -86,7 +86,11 @@ def train_batch(images, labels, model, optimizer, criterion, device="cuda"):
     optimizer.step()
 
     return loss
-    
+
+def train_log(acc, example_ct, epoch, loss):
+    # Where the magic happens
+    wandb.log({"epoch": epoch, "train_accuracy": acc, "train_loss": loss}, step=example_ct)
+    print(f"TRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
 
 def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name):
     
@@ -116,6 +120,9 @@ def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name
             best_epoch_loss = loss
             
         scheduler.step()
+
+        train_log(acc, example_ct, epoch, loss)
+
 
     return best_epoch_loss, acc_best_epoch_loss
                 
