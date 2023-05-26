@@ -41,21 +41,27 @@ https://github.com/lluisgomez/ConTextTransformer
 
 The codebase for this project is structured as follows:
 
-├── data/
-├── models/
-│   └── saved_models/
-├── results/
-├── src/
-│   ├── data/
-│   ├── models/
-│   ├── utils/
-│   ├── visualization/
-│   ├── train.py
-│   └── test.py
-├── config.py
-├── requirements.txt
-├── README.md
-└── main.py
+├── data/ 
+├── results/ 
+├── src/ 
+│   ├── data/ 
+│   │   ├── data_loader.py 
+│   │   └── conTextDataset.py 
+│   ├── models/ 
+│   │   ├── conTextTransformer.py 
+│   ├── utils/ 
+│   │   ├── utils.py 
+│   │   ├── utils_visualization.py 
+│   │   └── train_test_labels_split.py 
+│   ├── config.py 
+│   ├── hyperparameter_tuning.py 
+│   ├── inference.py 
+│   ├── main.py 
+│   ├── train.py 
+│   └── test.py 
+├── environment.yml 
+├── README.md 
+└── LICENSE 
 
 The `data` directory will contain all the data files. The `models` directory contains a subdirectory for saved models. The `results` directory contains subdirectories for training and evaluation results. The `src` directory contains the source code for the project, organized into subdirectories for data processing, model architectures, utility functions, visualization, training, and evaluation. The `config.py` file contains configuration parameters for the project, such as hyperparameters for the model and file paths for the data. The `requirements.txt` file lists the dependencies required to run the project. The `README.md` file contains instructions on how to set up and run the project, as well as information on the project's goals and structure. Finally, the `main.py` file is the entry point for running the project.
 
@@ -77,11 +83,32 @@ python main.py
 
 ## Firsts executions
 
+During the initial executions of the code, the model was trained on the MNIST dataset using a simple CNN architecture. The purpose of these executions was to set up the environment, verify the code's functionality, and ensure that the dependencies were properly installed.
+
 ## Tests done and Observations
+
+Several tests were conducted to validate the code and make observations. These tests included running the training process and evaluating the performance of the model on the MNIST dataset. The observations made during these tests are:
+
+- The model successfully trains on the MNIST dataset and achieves reasonable accuracy.
+- The Weights & Biases package is integrated into the code, allowing for monitoring and tracking of the network's learning progress.
+- The code structure follows a modular organization, separating different functionalities into respective directories.
+- The code utilizes pretrained CNN and word embedding models such as ResNet50 and FastText.
+- The ConTextTransformer architecture is used to combine visual and textual features for fine-grained classification.
 
 ## To Improve
 
+Based on the initial executions and observations, some potential areas for improvement are identified:
+
+- Explore different CNN pretrained models such as SE_ResNeXt101 to compare their performance.
+- Experiment with different word-embedding pretrained models such as BERT to capture more contextual information.
+- Fine-tune the hyperparameters of the model to optimize its performance on the specific business classification task.
+- Implement data augmentation techniques to increase the diversity and size of the training dataset.
+- Consider applying techniques like transfer learning or domain adaptation to improve the model's generalization to street view images.
+
 ## Weight & Bias
+
+The Weights & Biases package is integrated into the code to monitor the network's learning progress. It provides visualizations and metrics to track the model's performance during training. By utilizing Weights & Biases, it becomes easier to analyze and interpret the training process, identify potential issues, and make informed decisions for model improvement.
+PHOTOS OF THE METRICS AND RESULTS
 
 ## Results
 

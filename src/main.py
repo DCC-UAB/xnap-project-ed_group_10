@@ -5,10 +5,7 @@ import datetime
 import numpy as np
 import torch
 import torch.nn as nn
-import torchvision
-import torchvision.transforms as transforms
 import time
-#from beautifultable import BeautifulTable
 
 import config
 
@@ -96,7 +93,7 @@ def main():
     
     os.makedirs("./results/" + run_name, exist_ok=True)
     
-    with open("./results/" + run_name + "/config.txt", "w") as f:
+    with open("./results/" + run_name + "/config.txt", "a") as f:
         f.write("Date: {}\n".format(datetime.datetime.now().strftime("%Y %m %d, %H %M %S")))
         for key, value in cfg.items():
             f.write("{}: {}\n".format(key, value))

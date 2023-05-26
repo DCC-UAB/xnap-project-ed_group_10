@@ -30,3 +30,8 @@
 - Wandb
 - Hyperparameters Tunning
 - Readme
+
+
+
+- Guardar model per un set de validació
+- Batch size y LR compensar

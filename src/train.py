@@ -2,11 +2,6 @@ import wandb
 import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torchvision
-import os
-import sys
-import pickle as pkl
 import torchviz
 
 import config
@@ -27,9 +22,9 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         txt_mask = txt_mask.to(config.device)
         target = target.to(config.device)
         optimizer.zero_grad()
-        output = F.log_softmax(model(data_img, data_txt, txt_mask), dim=1)
-        loss = F.nll_loss(output, target)
-        loss.backward()
+        criterion = nn.CrossEntropyLoss()
+        output = model(data_img, data_txt, txt_mask)
+        loss = criterion(output, target)
         optimizer.step()
         
         # Print loss every 100 batches
@@ -140,7 +135,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         train_log(acc, example_ct, epoch, loss, optimizer.param_groups[0]['lr'])
         
         
-    with open("./results/" + run_name + "/config.txt", "w") as f:
+    with open("./results/" + run_name + "/config.txt", "a") as f:
         f.write("Train - Best accuracy: {}\n".format(best_acc))
         f.write("Train - Best loss: {}\n".format(best_loss))
         f.write("Train - Train mean loss: {}\n".format(np.mean(train_loss_history)))
