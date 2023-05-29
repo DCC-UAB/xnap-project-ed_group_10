@@ -129,8 +129,11 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
             # model_graph.render('./src/models/model_structure', view=False)
             
             best_loss = loss
-            
-        scheduler.step()
+        
+        if config.scheduler == "multisteplr":
+            scheduler.step()
+        elif config.scheduler == "reducelronplateau":
+            scheduler.step(loss)
         
         train_log(acc, example_ct, epoch, loss, optimizer.param_groups[0]['lr'])
         

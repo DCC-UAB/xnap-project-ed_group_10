@@ -79,6 +79,7 @@ def main():
         classes=config.num_classes,
         batch_size=config.batch_size,
         learning_rate=config.lr,
+        scheduler=config.scheduler,
         dataset="Business Dataset",
         architecture="Context Transformer",
         pretained_model=config.pretrained_model,

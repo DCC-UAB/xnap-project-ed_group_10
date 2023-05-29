@@ -53,7 +53,11 @@ def make():
     optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
     
     # The scheduler will update the learning rate after every epoch to achieve a better convergence
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
+    if config.scheduler == "multisteplr":
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
+    elif config.scheduler == "reducelronplateau":
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=3, threshold=0.01, verbose=True)
+
         
     return model, train_loader, test_loader, criterion, optimizer, scheduler
 

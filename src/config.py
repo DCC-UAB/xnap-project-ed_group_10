@@ -25,14 +25,15 @@ dropout = 0.1
 pretrained_weights = 'bert-base-uncased'
 pretrained_backbone = True
 max_num_words = 64
-pretrained_model = "shufflenet"
+pretrained_model = "resnet50"
 text_model = "fasttext"
 dropout_rate = 0
 bert_model = "bert-base-uncased"
 
 # Training
 lr = 1e-4
-epochs = 20
+scheduler = "reducelronplateau"
+epochs = 30
 patience = 5
 early_stopping = True
 save_dir = 'models/saved_models/'
