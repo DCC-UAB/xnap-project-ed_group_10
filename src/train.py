@@ -25,6 +25,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         criterion = nn.CrossEntropyLoss()
         output = model(data_img, data_txt, txt_mask)
         loss = criterion(output, target)
+        loss.backward()
         optimizer.step()
         
         # Print loss every 100 batches
