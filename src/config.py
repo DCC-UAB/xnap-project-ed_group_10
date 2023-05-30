@@ -33,7 +33,8 @@ bert_model = "bert-base-uncased"
 # Training
 lr = 1e-4
 scheduler = "reducelronplateau"
-epochs = 1
+optimizer = "adamw"
+epochs = 30
 patience = 5
 early_stopping = True
 save_dir = 'models/saved_models/'

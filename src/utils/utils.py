@@ -42,13 +42,17 @@ def make():
     for _, param in model.named_parameters():
         if param.requires_grad == True:
             params_to_update.append(param)
-    optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+
+    if config.optimizer == "adam":
+        optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+    elif config.optimizer == "adamw":
+        optimizer = torch.optim.AdamW(params_to_update, lr=config.lr)
     
     # The scheduler will update the learning rate after every epoch to achieve a better convergence
     if config.scheduler == "multisteplr":
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15,30], gamma=config.gamma)
     elif config.scheduler == "reducelronplateau":
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=3, threshold=0.01, verbose=True)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2, threshold=0.05, verbose=True)
 
         
     return model, train_loader, test_loader, val_loader, criterion, optimizer, scheduler

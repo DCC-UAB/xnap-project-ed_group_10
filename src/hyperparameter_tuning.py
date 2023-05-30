@@ -92,7 +92,7 @@ def train_log(acc, example_ct, epoch, loss):
     wandb.log({"epoch": epoch, "train_accuracy": acc, "train_loss": loss}, step=example_ct)
     print(f"TRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
 
-def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name):
+def train(model, train_loader, criterion, optimizer, scheduler, epochs):
     
     # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
@@ -132,22 +132,24 @@ def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name
 
 def objective(trial):
     # Sample hyperparameters to optimize
-    lr = trial.suggest_float("lr", 1e-5, 1e-3, log=True)
-    mlp_dim = trial.suggest_int("mlp_dim", 256, 1024, log=True)
-    depth = trial.suggest_int("depth", 1, 3)
-    heads = trial.suggest_int("heads", 2, 6)
+    lr = trial.suggest_categorical('lr', [1e-5, 1e-4, 1e-3])
+    batch_size = trial.suggest_categorical('batch_size', [8, 16, 32])
+
     epochs = 5
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # Starting WandrB run.
     config = {"trial_lr": lr,
-              "trial_mlp_dim": mlp_dim,
-              "trial_depth": depth,
-              "trail_heads":heads,
+              "trial_mlp_dim": 512,
+              "trial_depth": 2,
+              "trail_heads":4,
               "epochs":epochs,
               "dataset":"base",
               "architecture": "Context Transformer",
-              "pretrained_model":config.pretrained_model,
-              "text_model": config.text_model, 
+              "pretrained_model":"resnet50",
+              "text_model": "fasttext",
+              "scheduler": "reducelronplateau",
+              "optimizer": "adamw"
               }
     
     run = wandb.init(project="bussiness_uab_optuna",
@@ -158,20 +160,20 @@ def objective(trial):
 
 
     # Train the model and return the validation accuracy
-    train_loader, test_loader, eval_loader = Dataloader().get_loaders()
+    train_loader, test_loader, eval_loader = Dataloader().get_loaders(train_test=None, batch_size=batch_size)
     model = ConTextTransformer(
-        image_size=config.image_size,
-        num_classes=config.num_classes,
-        channels=config.channels,
-        dim=config.dim,
-        depth=depth,
-        heads=heads, 
-        mlp_dim=mlp_dim
-    ).to(config.device)
+        image_size=256,
+        num_classes=28,
+        channels=3,
+        dim=256,
+        depth=config.depth,
+        heads=config.heads, 
+        mlp_dim=config.mlp_dim
+    ).to(device)
 
-    epochs = 5
+    
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15, 30], gamma=config.gamma)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2, threshold=0.05, verbose=True)
     criterion = nn.CrossEntropyLoss()
     best_epoch_loss, acc_best_epoch_loss = train(model, train_loader, criterion, optimizer, scheduler, epochs)
 
@@ -185,7 +187,7 @@ def hyperparameter_tuning():
 
     # Optuna hyperparameter optimization
     study = optuna.create_study(direction="minimize")
-    study.optimize(objective, n_trials=10, show_progress_bar=True)
+    study.optimize(objective, n_trials=4, show_progress_bar=True)
 
     # Create the summary run.
     summary = wandb.init(project="bussiness_uab_optuna",
@@ -209,9 +211,7 @@ def hyperparameter_tuning():
     # Get best trial
     best_trial = study.best_trial
     best_lr = best_trial.params["lr"]
-    best_mlp_dim = best_trial.params["mlp_dim"]
-    best_depth = best_trial.params["depth"]
-    heads = best_trial.params["heads"]
+    best_batch_size = best_trial.params["batch_size"]
 
     print("\n\n\n")
     print("---------------------------------Best trial:------------------------------------------------")

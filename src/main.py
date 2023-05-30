@@ -80,6 +80,7 @@ def main():
         batch_size=config.batch_size,
         learning_rate=config.lr,
         scheduler=config.scheduler,
+        optimizer=config.optimizer,
         dataset="Business Dataset",
         architecture="Context Transformer",
         pretained_model=config.pretrained_model,
