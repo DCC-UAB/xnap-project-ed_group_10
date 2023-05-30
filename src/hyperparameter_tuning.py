@@ -92,7 +92,7 @@ def train_log(acc, example_ct, epoch, loss):
     wandb.log({"epoch": epoch, "train_accuracy": acc, "train_loss": loss}, step=example_ct)
     print(f"TRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
 
-def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name):
+def train(model, train_loader, criterion, optimizer, scheduler, epochs):
     
     # Keep track of loss and accuracy
     train_loss_history, test_loss_history = [], []
@@ -136,17 +136,20 @@ def objective(trial):
     batch_size = trial.suggest_categorical('batch_size', [8, 16, 32])
 
     epochs = 5
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
     # Starting WandrB run.
     config = {"trial_lr": lr,
-              "trial_mlp_dim": config.mlp_dim,
-              "trial_depth": config.depth,
-              "trail_heads":config.heads,
+              "trial_mlp_dim": 512,
+              "trial_depth": 2,
+              "trail_heads":4,
               "epochs":epochs,
               "dataset":"base",
               "architecture": "Context Transformer",
-              "pretrained_model":config.pretrained_model,
-              "text_model": config.text_model, 
+              "pretrained_model":"resnet50",
+              "text_model": "fasttext",
+              "scheduler": "reducelronplateau",
+              "optimizer": "adamw"
               }
     
     run = wandb.init(project="bussiness_uab_optuna",
@@ -157,16 +160,16 @@ def objective(trial):
 
 
     # Train the model and return the validation accuracy
-    train_loader, test_loader, eval_loader = Dataloader().get_loaders()
+    train_loader, test_loader, eval_loader = Dataloader().get_loaders(train_test=None, batch_size=batch_size)
     model = ConTextTransformer(
-        image_size=config.image_size,
-        num_classes=config.num_classes,
-        channels=config.channels,
-        dim=config.dim,
+        image_size=256,
+        num_classes=28,
+        channels=3,
+        dim=256,
         depth=config.depth,
         heads=config.heads, 
         mlp_dim=config.mlp_dim
-    ).to(config.device)
+    ).to(device)
 
     
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
