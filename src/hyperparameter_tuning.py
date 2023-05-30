@@ -132,17 +132,16 @@ def train(model, train_loader, criterion, optimizer, scheduler, epochs, run_name
 
 def objective(trial):
     # Sample hyperparameters to optimize
-    lr = trial.suggest_float("lr", 1e-5, 1e-3, log=True)
-    mlp_dim = trial.suggest_int("mlp_dim", 256, 1024, log=True)
-    depth = trial.suggest_int("depth", 1, 3)
-    heads = trial.suggest_int("heads", 2, 6)
+    lr = trial.suggest_categorical('lr', [1e-5, 1e-4, 1e-3])
+    batch_size = trial.suggest_categorical('batch_size', [8, 16, 32])
+
     epochs = 5
 
     # Starting WandrB run.
     config = {"trial_lr": lr,
-              "trial_mlp_dim": mlp_dim,
-              "trial_depth": depth,
-              "trail_heads":heads,
+              "trial_mlp_dim": config.mlp_dim,
+              "trial_depth": config.depth,
+              "trail_heads":config.heads,
               "epochs":epochs,
               "dataset":"base",
               "architecture": "Context Transformer",
@@ -164,14 +163,14 @@ def objective(trial):
         num_classes=config.num_classes,
         channels=config.channels,
         dim=config.dim,
-        depth=depth,
-        heads=heads, 
-        mlp_dim=mlp_dim
+        depth=config.depth,
+        heads=config.heads, 
+        mlp_dim=config.mlp_dim
     ).to(config.device)
 
-    epochs = 5
+    
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[15, 30], gamma=config.gamma)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2, threshold=0.05, verbose=True)
     criterion = nn.CrossEntropyLoss()
     best_epoch_loss, acc_best_epoch_loss = train(model, train_loader, criterion, optimizer, scheduler, epochs)
 
@@ -185,7 +184,7 @@ def hyperparameter_tuning():
 
     # Optuna hyperparameter optimization
     study = optuna.create_study(direction="minimize")
-    study.optimize(objective, n_trials=10, show_progress_bar=True)
+    study.optimize(objective, n_trials=4, show_progress_bar=True)
 
     # Create the summary run.
     summary = wandb.init(project="bussiness_uab_optuna",
@@ -209,9 +208,7 @@ def hyperparameter_tuning():
     # Get best trial
     best_trial = study.best_trial
     best_lr = best_trial.params["lr"]
-    best_mlp_dim = best_trial.params["mlp_dim"]
-    best_depth = best_trial.params["depth"]
-    heads = best_trial.params["heads"]
+    best_batch_size = best_trial.params["batch_size"]
 
     print("\n\n\n")
     print("---------------------------------Best trial:------------------------------------------------")
