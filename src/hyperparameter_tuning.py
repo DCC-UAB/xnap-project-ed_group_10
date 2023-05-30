@@ -119,7 +119,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, epochs):
             acc_best_epoch_loss = acc
             best_epoch_loss = loss
             
-        scheduler.step()
+        scheduler.step(loss)
 
         train_log(acc, example_ct, epoch, loss)
 
