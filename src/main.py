@@ -102,7 +102,7 @@ def main():
     model_pipeline(run_name=run_name)
 
     time_end = time.time()
-    print("Total execution time:", time_end - time_start)
+    print("Total execution time:", time_end - time_start, "\n")
 
     wandb.finish()
 

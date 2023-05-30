@@ -143,7 +143,8 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, run_
         f.write("Train - Best accuracy: {}\n".format(best_acc))
         f.write("Train - Best loss: {}\n".format(best_loss))
         f.write("Train - Train mean loss: {}\n".format(np.mean(train_loss_history)))
-        #f.write("Train - Validation mean loss: {}\n".format(np.mean(val_loss_history.cpu().numpy())))
+        val_loss_history_cpu = [x.cpu().numpy() for x in val_loss_history]
+        f.write("Train - Validation mean loss: {}\n".format(np.mean(val_loss_history_cpu)))
         
         
     utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")
