@@ -63,7 +63,7 @@ def inference_test():
 
     probs = context_inference(model, img, OCR_tokens)
     class_id = np.argmax(probs)
-    print('Prediction without text: {} ({})'.format(class_labels[class_id+1], probs[0,class_id]))
+    print('\nPrediction without text: {} ({})\n'.format(class_labels[class_id+1], probs[0,class_id]))
 
     OCR_tokens = [
         'GAIL', 
@@ -73,7 +73,7 @@ def inference_test():
 
     probs = context_inference(model, img, OCR_tokens)
     class_id = np.argmax(probs)
-    print('Prediction with text:\t {} ({})'.format(class_labels[class_id+1], probs[0,class_id]))
+    print('\nPrediction with text:\t {} ({})\n'.format(class_labels[class_id+1], probs[0,class_id]))
 
     # Prediction without text: Diner (0.3832743763923645)
     # Prediction with text:	 Bakery (0.9980818033218384)
