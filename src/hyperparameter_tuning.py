@@ -158,7 +158,7 @@ def objective(trial):
 
 
     # Train the model and return the validation accuracy
-    train_loader, test_loader = Dataloader().get_loaders()
+    train_loader, test_loader, eval_loader = Dataloader().get_loaders()
     model = ConTextTransformer(
         image_size=config.image_size,
         num_classes=config.num_classes,

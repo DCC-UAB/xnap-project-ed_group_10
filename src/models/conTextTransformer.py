@@ -8,6 +8,7 @@ import torchvision
 from einops import rearrange
 from transformers import BertModel
 import timm
+from transformers import BertTokenizer
 
 import config
 
@@ -84,9 +85,28 @@ class ConTextTransformer(nn.Module):
         cls_tokens = self.cls_token.expand(img.shape[0], -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
         x += self.pos_embedding
+        
+        # Crear un tokenizer de BERT
+        tokenizer = BertTokenizer.from_pretrained(config.bert_model)
+
+        # Convertir el texto en tokens
+        # tokens = tokenizer.encode_plus(
+        #     txt,
+        #     max_length=config.max_num_words,  # Especifica la longitud máxima de la secuencia
+        #     truncation=True,  # Trunca la secuencia si excede la longitud máxima
+        #     padding='max_length',  # Rellena la secuencia si es más corta que la longitud máxima
+        #     return_tensors='pt'  # Devuelve los tokens como tensores de PyTorch
+        # )
+
+        # # Obtener los tensores de tokens y máscara de atención
+        # txt_tokens = tokens['input_ids']
+        # txt_mask = tokens['attention_mask']
 
         if config.text_model == 'bert':
-            txt_outputs,  = self.bert(txt)[0][:, 0]  # Obtener las representaciones del token CLS de BERT
+            print(txt.shape)
+            print(txt)
+            print(self.bert(txt)[0][:, 0])
+            txt_outputs = self.bert(txt)[0][:, 0]
             x2 = self.bert_feature_to_embedding(txt_outputs)
             x = torch.cat((x, x2), dim=1)
         elif config.text_model == 'fasttext':

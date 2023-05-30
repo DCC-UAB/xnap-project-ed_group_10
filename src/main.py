@@ -23,15 +23,15 @@ torch.manual_seed(hash("by removing stochasticity") % 2**32 - 1)
 torch.cuda.manual_seed_all(hash("so runs are repeatable") % 2**32 - 1)
 
 
-def model_pipeline(do_train=False, do_test=True, do_inference=True, 
+def model_pipeline(do_train=True, do_test=True, do_inference=True, 
                    run_name="main_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")) -> nn.Module:
     
     # make the model, data, and optimization problem
-    model, train_loader, test_loader, criterion, optimizer, scheduler = make()
+    model, train_loader, test_loader, val_loader, criterion, optimizer, scheduler = make()
 
     if do_train:
         # and use them to train the model
-        train(model, train_loader, criterion, optimizer, scheduler, run_name)
+        train(model, train_loader, val_loader, criterion, optimizer, scheduler, run_name)
 
     if do_test:
         # and test its final performance

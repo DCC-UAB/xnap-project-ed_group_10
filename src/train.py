@@ -94,13 +94,13 @@ def train_log(acc, example_ct, epoch, loss, lr):
     print(f"TRAIN - Accuracy after {str(example_ct).zfill(5)} examples: {acc:.3f}\n")
     
 
-def train(model, train_loader, criterion, optimizer, scheduler, run_name):
+def train(model, train_loader, val_loader, criterion, optimizer, scheduler, run_name):
     
     # Tell wandb to watch what the model gets up to: gradients, weights, and more!
     wandb.watch(model, criterion, log="all", log_freq=10)
 
     # Keep track of loss and accuracy
-    train_loss_history, test_loss_history = [], []
+    train_loss_history, val_loss_history = [], []
     acc_history = []
     best_acc = 0
     best_loss = np.inf
@@ -111,7 +111,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         
         print('\nEpoch:', epoch)
         iter_in_epoch = train_epoch(model, optimizer, train_loader, train_loss_history)
-        acc, loss = evaluate(model, train_loader, test_loss_history)
+        acc, loss = evaluate(model, val_loader, val_loss_history)
         
         acc_history.append(acc)
         if acc>best_acc: 
@@ -143,7 +143,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, run_name):
         f.write("Train - Best accuracy: {}\n".format(best_acc))
         f.write("Train - Best loss: {}\n".format(best_loss))
         f.write("Train - Train mean loss: {}\n".format(np.mean(train_loss_history)))
-        f.write("Train - Test mean loss: {}\n".format(np.mean(test_loss_history)))
+        #f.write("Train - Validation mean loss: {}\n".format(np.mean(val_loss_history.cpu().numpy())))
         
         
     utils_visualizations.make_loss_plot(train_loss_history, "./results/" + run_name + "/train_loss.png")

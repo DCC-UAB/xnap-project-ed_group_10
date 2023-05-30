@@ -54,7 +54,16 @@ class Dataloader():
             train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
             test_loader = torch.utils.data.DataLoader(test_set, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
             
-            return train_loader, test_loader
+            train_set_len = len(train_set)
+            train_len_80 = int(train_set_len * 0.8)
+            train_len_20 = train_set_len - train_len_80
+
+            train_set, val_set = torch.utils.data.random_split(train_set, [train_len_80, train_len_20])
+
+            train_loader = torch.utils.data.DataLoader(train_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
+            val_loader = torch.utils.data.DataLoader(val_set, batch_size=config.batch_size, shuffle=True, num_workers=config.num_workers)
+            
+            return train_loader, test_loader, val_loader
         
         elif train_test == "train":
             

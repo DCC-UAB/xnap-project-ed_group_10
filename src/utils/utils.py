@@ -19,18 +19,10 @@ from data.dataloader import *
 import config
 
 
-def make_loader(train=True):
-    
-    train = "train" if train else "test"
-    loader = Dataloader().get_loaders(train)    
-    return loader
-
-
 def make():
     
     # Make the data
-    train_loader = make_loader(train=True)
-    test_loader = make_loader(train=False)
+    train_loader, test_loader, val_loader = Dataloader().get_loaders()
 
     # Make the model
     model = ConTextTransformer(
@@ -59,7 +51,7 @@ def make():
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=3, threshold=0.01, verbose=True)
 
         
-    return model, train_loader, test_loader, criterion, optimizer, scheduler
+    return model, train_loader, test_loader, val_loader, criterion, optimizer, scheduler
 
 
 def context_inference(model, img_filename, OCR_tokens):
