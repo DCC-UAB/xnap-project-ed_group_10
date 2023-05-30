@@ -2,36 +2,18 @@
 + TO DO 
 + --------------------
 
-- [ ]  Bert model
-- [ ]  Try new dataset
-- [ ]  Aplicar Hyperparameters Tunning
-- [ ]  Try to normalize the data
-- [ ]  Provar de cambiar les últimes capes de la xarxa
+- Bert model - Sí
 
-+ --------------------
-+ TO ASK 
-+ --------------------
+- Provar de cambiar les últimes capes de la xarxa - Sí, tot es anar provant i treure conclusions
 
-- Com cambiaries les ultimes capes de la xarxa?
-- Utilitzem un altre dataset?
-- Millores que faries?
-- Tema loss - Diferents escales - Es pot comparar la loss de epoques de train amb la loss mitjana de test de imatges?
-- Ara tenim learning rate anaptatiu. Provar estatic?
+- Utilitzem un altre dataset? - No
 
-+ --------------------
-+ TO EXPLAIN
-+ --------------------
+- Ara tenim learning rate anaptatiu. Provar estatic? - Scheduler, Done
 
-- Adam optimizer és el millor ja que és el que utilitza el descens del gradient estocàstic
-- Hem provat AdamW però no ha donat bons resultats
+- Hem provat AdamW però no ha donat bons resultats - Good, pero demostrar-ho i explicar-ho a la presentació
 
-- Estructura - Començar per main i anar pas a pas
-- Models
-- Wandb
-- Hyperparameters Tunning
-- Readme
+- Fer sweep de paràmetres, Wandb - Done?
 
+- Guardar model per un set de validació, no cada cop que hi ha best accuracy ja que d'aquesta manera sesguem el dataset - To do
 
-
-- Guardar model per un set de validació
-- Batch size y LR compensar
+- Batch size y LR compensar - To do with Optuna. Mirar quin es el millor espectre o rang
