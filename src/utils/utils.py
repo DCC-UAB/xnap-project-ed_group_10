@@ -42,7 +42,11 @@ def make():
     for _, param in model.named_parameters():
         if param.requires_grad == True:
             params_to_update.append(param)
-    optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+
+    if config.optimizer == "adam":
+        optimizer = torch.optim.Adam(params_to_update, lr=config.lr)
+    elif config.optimizer == "adamw":
+        optimizer = torch.optim.AdamW(params_to_update, lr=config.lr)
     
     # The scheduler will update the learning rate after every epoch to achieve a better convergence
     if config.scheduler == "multisteplr":
