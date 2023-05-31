@@ -119,7 +119,7 @@ def train(model, train_loader, criterion, optimizer, scheduler, epochs):
             acc_best_epoch_loss = acc
             best_epoch_loss = loss
             
-        scheduler.step()
+        scheduler.step(loss)
 
         train_log(acc, example_ct, epoch, loss)
 
@@ -140,10 +140,8 @@ def objective(trial):
 
     # Starting WandrB run.
     config = {"trial_lr": lr,
-              "trial_mlp_dim": 512,
-              "trial_depth": 2,
-              "trail_heads":4,
               "epochs":epochs,
+              "batch_size":batch_size,
               "dataset":"base",
               "architecture": "Context Transformer",
               "pretrained_model":"resnet50",
@@ -166,9 +164,9 @@ def objective(trial):
         num_classes=28,
         channels=3,
         dim=256,
-        depth=config.depth,
-        heads=config.heads, 
-        mlp_dim=config.mlp_dim
+        depth=2,
+        heads=4, 
+        mlp_dim=512
     ).to(device)
 
     
