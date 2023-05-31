@@ -1,0 +1,18 @@
+Date: 2023 05 30, 15 49 25
+epochs: 30
+classes: 28
+batch_size: 16
+learning_rate: 0.0001
+scheduler: reducelronplateau
+optimizer: adamw
+dataset: Business Dataset
+architecture: Context Transformer
+pretained_model: resnet50
+text_model: fasttext
+device: cuda:0
+Train - Best accuracy: 0.7481458783149719
+Train - Best loss: 0.05610572174191475
+Train - Train mean loss: 0.7492530869940917
+Train - Validation mean loss: 0.060298118740320206
+Test - Accuracy: 0.7776126795443289
+Test - Loss: 0.048275504261255264
