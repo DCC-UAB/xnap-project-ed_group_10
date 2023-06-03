@@ -77,7 +77,7 @@ The initial code had some errors both in its approach and structure.
 
 ## Improvements
 
-### Different CNN pretrained models used
+### Different pretrained CNN models used
 
 - ResNet50 (Residual Network) is a variant of the ResNet architecture consisting of 50 layers. It has gained significant popularity in image classification tasks due to its remarkable performance. ResNet50 is a well-suited architecture for solving image classification problems for several reasons. Firstly, its deep structure allows it to capture intricate patterns and features present in images, enabling it to learn complex representations. This is especially beneficial when dealing with datasets that contain diverse and highly detailed visual information. Additionally, ResNet50's residual blocks facilitate the flow of information across connection hops, mitigating the problem of performance decay that often arises with deeper networks. By incorporating skip connections, ResNet50 can effectively address the vanishing gradient problem and accelerate the convergence of the network during training. These factors contribute to its ability to achieve state-of-the-art accuracy in image classification tasks.
 - SE_ResNeXt101 (Residual Network with Next) is an advanced variant of the ResNet architecture that demonstrates superior performance compared to ResNet50. Its increased depth, with 101 layers, allows it to capture more intricate patterns and representations, making it well-suited for complex image classification problems. SE_ResNeXt101 incorporates the concept of "cardinal grouping," which enhances the expressiveness of the residual blocks. By using multiple transformation paths within each block, it can capture diverse forms of information and increase the representation power of the network. Furthermore, SE_ResNeXt101 integrates Squeeze-and-Excitation (SE) modules, which adaptively recalibrate the importance of different channels based on their relevance. This attention mechanism enables the network to focus on the most informative features, leading to improved discriminative ability. However, it is important to note that the increased depth and complexity of SE_ResNeXt101 come at the cost of higher computational requirements. Therefore, it may be more suitable for scenarios where computational resources are abundant.
@@ -121,7 +121,29 @@ The initial code had some errors both in its approach and structure.
 
 ## Tests done and Observations (Abel)
 
-### Test 1
+*Before we begin explaining and analyzing the different experiments conducted, it is important to note that we have only logged the loss and accuracy metrics from the evaluation of the train (using the validationloader) and the test sets. Therefore, in those graphs where you see train_*, it refers to the evaluation during training. We acknowledge that it is important to also track the metrics for the train set, but we overlooked this when logging the experiments in wandb. In summary, we only have tracking of the metrics for the validation and test sets.
+
+### Test 1: After making the changes to the initial code
+
+In the first test, we can observe the improvement in accuracy and loss after making the [changes to the initial code](#Changes-done-to-the-initial-code).
+
+![1685805842906](image/README/1685805842906.png) ![1685805888237](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805888237.png)
+
+![1685805590593](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805590593.png)![1685805986704](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805986704.png)
+
+As we can see, we have achieved an improvement of 2.58% in test accuracy. We believe that this improvement is due to the fact that we now use a `validationloader` to evaluate the model during training, reducing the final overfitting of the model.
+
+The model training took 2h 51m 38s.
+
+PD: The significant difference between the test loss and the validation loss at this point is due to the fact that we were still using the initial loss function for training and the new loss function for testing.
+
+### Test 2: Performance of different pretrained CNN models used
+
+In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
+
+
+
+
 
 ## To Improve (Sergi)
 
