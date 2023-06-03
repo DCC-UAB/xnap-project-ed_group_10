@@ -26,7 +26,7 @@ To provide the model with text information, we utilize OCR labels that contain t
 
 Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
-## Starting point model and architecture 
+## Starting point model and architecture
 
 ![ConTextTransformer](readme_images/ConTextTransformer.png)
 
@@ -170,7 +170,7 @@ PD: The significant difference between the test loss and the validation loss at 
 
 -- ShuffleNet --
 
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png) 
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png)
 ![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_08_32.png)
 
 Accuracy TEST - 0.7299
@@ -184,13 +184,13 @@ We see that shufflenet gives us worse result than ResNet50, but it is faster to 
 
 -- ES_ResneXt101 --
 
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png) 
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png)
 ![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_23_16.png)
 
 Accuracy TEST - 0.7925
 Loss TEST - 0.0494
 
-As we can see, the loss have improved 1.32% with respect to ResNet50. 
+As we can see, the loss have improved 1.32% with respect to ResNet50.
 
 The model training took 4h 20m 20s (+51.17% more with respect to ResNet50.). The model took more time to train due to the fact that the model is more complex.
 
@@ -233,6 +233,17 @@ Below you can see some graphs comparing the results of the different trials.
 As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
 
 However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
+
+As I mentioned before, since 5 epochs is not significant enough to determine whether a batch size of 64 and a learning rate of 0.0001 are the best hyperparameters, we have trained the model with these settings for 30 epochs.
+
+![1685810890670](readme_images/htloss.png)![1685810890670](readme_images/httrain1.png)
+
+![1685825087223](readme_images/hthtlr.png)![1685810890670](readme_images/htresum.png)
+
+As we can see, the results are not bad, but they are slightly worse than using a batch size of 16 and a learning rate of 0.0001. The reason why these hyperparameters were better with 5 epochs is that with a larger batch size and learning rate, the model is able to learn faster in the initial epochs, but afterwards it can lead to oscillations in the model weights and make it difficult to converge to an optimal solution.
+
+
+
 
 ## To Improve (Sergi)
 
