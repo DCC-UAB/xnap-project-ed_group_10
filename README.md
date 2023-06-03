@@ -242,9 +242,6 @@ As I mentioned before, since 5 epochs is not significant enough to determine whe
 
 As we can see, the results are not bad, but they are slightly worse than using a batch size of 16 and a learning rate of 0.0001. The reason why these hyperparameters were better with 5 epochs is that with a larger batch size and learning rate, the model is able to learn faster in the initial epochs, but afterwards it can lead to oscillations in the model weights and make it difficult to converge to an optimal solution.
 
-
-
-
 ## To Improve (Sergi)
 
 Based on the initial executions and observations, some potential areas for improvement are identified:
