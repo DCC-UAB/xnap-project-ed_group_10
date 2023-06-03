@@ -54,7 +54,8 @@ The codebase for this project is structured as follows:
 
 The `data` directory will contain all the data files. The `results` directory will contain all the results of the training and testing. Apart from wandb they are also saved in local. The `src` directory will contain all the code files. The `data_loader.py` file will contain the code which created the loaders to to load the data. The `conTextDataset.py` file will contain the code to load the data with its transformations. The `conTextTransformer.py` file will contain the code to create the model and all its layers. The `utils.py` file will contain `make` function which will start all the loaders, datasets objects, schedulers, etc. and also contains an auxiliar function for inference testing. The `utils_visualization.py` file will contain the code to create the plots of the training and testing. The `train_test_labels_split.py` file will contain the code to separate all the train and test data from the initial ORC labels and images that the dataset contains. The `config.py` file will contain the code with all variables used to have all them in same place. The `hyperparameter_tuning.py` file will contain the code to tune the hyperparameters of the model. The `inference.py` file will contain the code to test the model with a single image. The `main.py` file will contain the code to start the pipeline. The `train.py` file will contain the code to train the model. The `test.py` file will contain the code to test the model. The `environment.yml` file will contain the code with the environment configuration. The `README.md` file will contain the code with the information of the project and finally the `LICENSE` file will contain the code with the license of the project.
 
-If we check the `main` code, we can see that is there where we start our main pipeline that is divided into four main steps: 
+If we check the `main` code, we can see that is there where we start our main pipeline that is divided into four main steps:
+
 - Config file and Wandb initialization: where we load the config file and initialize wandb. The config file is where we can change all the variables of the pipeline and modify the hyperparameters of the model. Also we can change the type which pretrained model, schedulers, etc. we want to use. The wandb initialization is where we initialize the wandb project and create a new run.
 - Data processing and model creation: where we load the data and preprocess it. First we load the data with the dataloader.py file which creates a ConTextDataset with the images and the labels. It returns a train_loader, val_loader and test_loader. All data with its transformations are loaded with the conTextDataset.py file. Then we create the model with the conTextTransformer.py file which creates the model with the resnet50 and the fasttext embeddings.
 - Training: where we train the model with the train.py file. It trains the model with the train_loader and then avaluates it with the val_loader. Also if the loss is lower than the best loss, it saves the best parameters of the model. Finally it saves the results of the training in wandb and update the learning rate with the scheduler. Once the training is finished, it created a plot with the results of the training.
@@ -108,9 +109,15 @@ The initial code had some errors both in its approach and structure.
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
 - On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
 
-### Different Learning Rate Schedulers used
+### Different Optimizers used
 
-Your notations here :)
+* Adam: The Adam optimizer is a widely used optimization algorithm in deep learning. It combines the advantages of two other popular optimizers, AdaGrad and RMSProp, by incorporating adaptive learning rates and momentum. Adam calculates the adaptive learning rates for each parameter based on their past gradients and uses momentum to accelerate convergence. This optimizer is known for its efficiency, fast convergence, and robust performance across a wide range of tasks and architectures.
+  In our initial implementation, we used the Adam optimizer as it is a reliable choice for image classification. It provides a good balance between speed and performance, making it a suitable optimizer for our problem.
+* AdamW: AdamW is a variant of the Adam optimizer that incorporates weight decay regularization, also known as L2 regularization. Weight decay helps prevent overfitting by adding a penalty term to the loss function that encourages the model to have smaller weights. The original Adam optimizer did not include weight decay directly in its update rule, but AdamW modifies the algorithm to include this regularization term. By doing so, AdamW can handle weight decay more effectively and potentially improve the generalization performance of the model.
+
+  The hypotesis behind the change in optimizer is as follows:
+* We do not expect it to significantly outperform Adam in our image classification task. This is because weight decay regularization is more commonly beneficial in scenarios where the model has a large number of parameters, such as big natural language processing tasks or complex architectures.
+* In image classification, the impact of weight decay may be less pronounced, as the model's parameters are primarily influenced by the image features rather than the textual components. Nonetheless, we are curious to evaluate the performance of AdamW and see if it offers any advantages in our specific setting.
 
 ## Tests done and Observations (Abel)
 
@@ -131,6 +138,7 @@ Based on the initial executions and observations, some potential areas for impro
 The Weights & Biases package is integrated into the code to monitor the network's learning progress. It provides visualizations and metrics to track the model's performance during training. By utilizing Weights & Biases, it becomes easier to analyze and interpret the training process, identify potential issues, and make informed decisions for model improvement.
 
 The following metrics are the once we decided to monitor during training:
+
 - Epochs: The number of epochs completed during training.
 - Classes: The number of classes in the dataset.
 - Batch Size: The number of samples per batch.
@@ -151,7 +159,7 @@ WANDB saved variables page:
 
 ![image](readme_images/wandb_variables.png)
 
-## Inferences 
+## Inferences
 
 ## Inferences
 
