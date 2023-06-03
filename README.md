@@ -98,6 +98,16 @@ The initial code had some errors both in its approach and structure.
 - Additionally, CrossEntropyLoss enhances numerical stability compared to the previous sequence of F.log_softmax and F.nll_loss. It handles potential issues of overflow or underflow more effectively, ensuring more reliable and accurate loss calculations.
 - Furthermore, using CrossEntropyLoss improves code clarity and simplicity. It allows for a cleaner implementation by directly utilizing a specific loss function designed for multi-class classification tasks. This approach conveys the intention of the loss calculation more clearly, making the code easier to read and understand.
 
+### Different Optimizers used
+
+* Adam: The Adam optimizer is a widely used optimization algorithm in deep learning. It combines the advantages of two other popular optimizers, AdaGrad and RMSProp, by incorporating adaptive learning rates and momentum. Adam calculates the adaptive learning rates for each parameter based on their past gradients and uses momentum to accelerate convergence. This optimizer is known for its efficiency, fast convergence, and robust performance across a wide range of tasks and architectures.
+  In our initial implementation, we used the Adam optimizer as it is a reliable choice for image classification. It provides a good balance between speed and performance, making it a suitable optimizer for our problem.
+* AdamW: AdamW is a variant of the Adam optimizer that incorporates weight decay regularization, also known as L2 regularization. Weight decay helps prevent overfitting by adding a penalty term to the loss function that encourages the model to have smaller weights. The original Adam optimizer did not include weight decay directly in its update rule, but AdamW modifies the algorithm to include this regularization term. By doing so, AdamW can handle weight decay more effectively and potentially improve the generalization performance of the model.
+
+  The hypotesis behind the change in optimizer is as follows:
+* We do not expect it to significantly outperform Adam in our image classification task. This is because weight decay regularization is more commonly beneficial in scenarios where the model has a large number of parameters, such as big natural language processing tasks or complex architectures.
+* In image classification, the impact of weight decay may be less pronounced, as the model's parameters are primarily influenced by the image features rather than the textual components. Nonetheless, we are curious to evaluate the performance of AdamW and see if it offers any advantages in our specific setting.
+
 ### Different Learning Rate Schedulers used
 
 - MultiStepLR: The MultiStepLR scheduler is the default scheduler provided in our base project. It is a learning rate adjustment strategy that reduces the learning rate at specific moments during training. It requires a list of milestones (epochs) and reduces the learning rate by a factor of gamma at each of these milestones.
@@ -109,15 +119,13 @@ The initial code had some errors both in its approach and structure.
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
 - On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
 
-### Different Optimizers used
 
-* Adam: The Adam optimizer is a widely used optimization algorithm in deep learning. It combines the advantages of two other popular optimizers, AdaGrad and RMSProp, by incorporating adaptive learning rates and momentum. Adam calculates the adaptive learning rates for each parameter based on their past gradients and uses momentum to accelerate convergence. This optimizer is known for its efficiency, fast convergence, and robust performance across a wide range of tasks and architectures.
-  In our initial implementation, we used the Adam optimizer as it is a reliable choice for image classification. It provides a good balance between speed and performance, making it a suitable optimizer for our problem.
-* AdamW: AdamW is a variant of the Adam optimizer that incorporates weight decay regularization, also known as L2 regularization. Weight decay helps prevent overfitting by adding a penalty term to the loss function that encourages the model to have smaller weights. The original Adam optimizer did not include weight decay directly in its update rule, but AdamW modifies the algorithm to include this regularization term. By doing so, AdamW can handle weight decay more effectively and potentially improve the generalization performance of the model.
+### Hyperparameter tuning with Optuna
 
-  The hypotesis behind the change in optimizer is as follows:
-* We do not expect it to significantly outperform Adam in our image classification task. This is because weight decay regularization is more commonly beneficial in scenarios where the model has a large number of parameters, such as big natural language processing tasks or complex architectures.
-* In image classification, the impact of weight decay may be less pronounced, as the model's parameters are primarily influenced by the image features rather than the textual components. Nonetheless, we are curious to evaluate the performance of AdamW and see if it offers any advantages in our specific setting.
+We have implemented a `hyperparameter_tuning.py` module using Optuna to find the best batch size and learning rate for our model and problem. Optuna is a powerful framework for hyperparameter optimization that intelligently explores the hyperparameter space to identify optimal configurations. By leveraging Optuna, we aim to maximize our model's performance by fine-tuning these key hyperparameters.
+
+It is important to note that the tests conducted to find the best hyperparameters were of a pilot nature and do not have sufficient strength to determine the optimal hyperparameter combination. This is because we significantly reduced the search space, the number of trials, and the number of epochs per trial to avoid waiting for more than 20 hours to perform a "decent" hyperparameter tuning.
+
 
 ## Tests done and Observations (Abel)
 
@@ -131,6 +139,8 @@ In the first test, we can observe the improvement in accuracy and loss after mak
 
 ![1685805590593](readme_images/1685805590593.png)![1685805986704](readme_images/1685805986704.png)
 
+- We use 20 epochs to train this model.
+
 As we can see, we have achieved an improvement of 2.58% in test accuracy. We believe that this improvement is due to the fact that we now use a `validationloader` to evaluate the model during training, reducing the final overfitting of the model.
 
 The model training took 2h 51m 38s.
@@ -139,10 +149,23 @@ PD: The significant difference between the test loss and the validation loss at 
 
 ### Test 2: Performance of different pretrained CNN models used
 
-In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
+In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](#Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
 
+### Test 3: Performance of different optimizers used
 
+In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different optimizers](#Different-Optimizers-used). In addition, we will examine the performance of the AdamW optimizer.
 
+*RELLENAR*
+
+### Test 4: Performance of different schedulers used
+
+In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
+
+*RELLENAR*
+
+### Extra Test: Hyperparameter Tuning with Optuna
+
+*RELLENAR*
 
 
 ## To Improve (Sergi)
