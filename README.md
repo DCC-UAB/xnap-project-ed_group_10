@@ -52,9 +52,14 @@ The codebase for this project is structured as follows:
 ├── README.md  
 └── LICENSE  
 
-The `data` directory will contain all the data files. The `models` directory contains a subdirectory for saved models. The `results` directory contains subdirectories for training and evaluation results. The `src` directory contains the source code for the project, organized into subdirectories for data processing, model architectures, utility functions, visualization, training, and evaluation. The `config.py` file contains configuration parameters for the project, such as hyperparameters for the model and file paths for the data. The `requirements.txt` file lists the dependencies required to run the project. The `README.md` file contains instructions on how to set up and run the project, as well as information on the project's goals and structure. Finally, the `main.py` file is the entry point for running the project.
+The `data` directory will contain all the data files. The `results` directory will contain all the results of the training and testing. Apart from wandb they are also saved in local. The `src` directory will contain all the code files. The `data_loader.py` file will contain the code which created the loaders to to load the data. The `conTextDataset.py` file will contain the code to load the data with its transformations. The `conTextTransformer.py` file will contain the code to create the model and all its layers. The `utils.py` file will contain `make` function which will start all the loaders, datasets objects, schedulers, etc. and also contains an auxiliar function for inference testing. The `utils_visualization.py` file will contain the code to create the plots of the training and testing. The `train_test_labels_split.py` file will contain the code to separate all the train and test data from the initial ORC labels and images that the dataset contains. The `config.py` file will contain the code with all variables used to have all them in same place. The `hyperparameter_tuning.py` file will contain the code to tune the hyperparameters of the model. The `inference.py` file will contain the code to test the model with a single image. The `main.py` file will contain the code to start the pipeline. The `train.py` file will contain the code to train the model. The `test.py` file will contain the code to test the model. The `environment.yml` file will contain the code with the environment configuration. The `README.md` file will contain the code with the information of the project and finally the `LICENSE` file will contain the code with the license of the project.
 
-
+If we check the `main` code, we can see that is there where we start our main pipeline that is divided into four main steps: 
+- Config file and Wandb initialization: where we load the config file and initialize wandb. The config file is where we can change all the variables of the pipeline and modify the hyperparameters of the model. Also we can change the type which pretrained model, schedulers, etc. we want to use. The wandb initialization is where we initialize the wandb project and create a new run.
+- Data processing and model creation: where we load the data and preprocess it. First we load the data with the dataloader.py file which creates a ConTextDataset with the images and the labels. It returns a train_loader, val_loader and test_loader. All data with its transformations are loaded with the conTextDataset.py file. Then we create the model with the conTextTransformer.py file which creates the model with the resnet50 and the fasttext embeddings.
+- Training: where we train the model with the train.py file. It trains the model with the train_loader and then avaluates it with the val_loader. Also if the loss is lower than the best loss, it saves the best parameters of the model. Finally it saves the results of the training in wandb and update the learning rate with the scheduler. Once the training is finished, it created a plot with the results of the training.
+- Testing: where we test the model with the test.py file. It loads the best parameters of the model and test it with the test_loader. Then it saves the results of the testing in wandb and creates a plot with the results of the testing.
+- Inference: it is basically a test with a single image. It loads the best parameters of the model and test it with the image we choose. It returns the label of the image and the probability of the label. (`NOT ACCURACY`)
 
 ## Firsts executions
 
@@ -110,8 +115,27 @@ Based on the initial executions and observations, some potential areas for impro
 
 The Weights & Biases package is integrated into the code to monitor the network's learning progress. It provides visualizations and metrics to track the model's performance during training. By utilizing Weights & Biases, it becomes easier to analyze and interpret the training process, identify potential issues, and make informed decisions for model improvement.
 
+The following metrics are the once we decided to monitor during training:
+- Epochs: The number of epochs completed during training.
+- Classes: The number of classes in the dataset.
+- Batch Size: The number of samples per batch.
+- Learning Rate: The last learning rate used during training.
+- Scheduler: The optimizer's learning rate scheduler type.
+- Optimizer: The optimizer type.
+- Dataset: The dataset used for training.
+- Architecture: The model architecture. Default: "Context Transformer".
+- Pretrained Model: The pretrained model used for transfer learning. Default: "ResNet50".
+- Text Model: The pretrained model used for word embedding. Default: "fasttext".
+- Device: The device used for training. Default: "cuda".
 
-PHOTOS OF THE METRICS AND RESULTS
+Global WANDB page:
+
+![image](readme_images/wandb_global.png)
+
+WANDB saved variables page:
+
+![image](readme_images/wandb_variables.png)
+
 ## Inferences 
 
 
