@@ -127,9 +127,9 @@ The initial code had some errors both in its approach and structure.
 
 In the first test, we can observe the improvement in accuracy and loss after making the [changes to the initial code](#Changes-done-to-the-initial-code).
 
-![1685805842906](image/README/1685805842906.png) ![1685805888237](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805888237.png)
+![1685805842906](readme_images/1685805842906.png) ![1685805888237](readme_images/1685805888237.png)
 
-![1685805590593](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805590593.png)![1685805986704](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/image/README/1685805986704.png)
+![1685805590593](readme_images/1685805590593.png)![1685805986704](readme_images/1685805986704.png)
 
 As we can see, we have achieved an improvement of 2.58% in test accuracy. We believe that this improvement is due to the fact that we now use a `validationloader` to evaluate the model during training, reducing the final overfitting of the model.
 
