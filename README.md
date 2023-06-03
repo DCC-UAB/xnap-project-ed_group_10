@@ -23,8 +23,6 @@ We use the Con-Text dataset which is built from sub-categories of the ImageNet "
 
 To provide the model with text information, we utilize OCR labels that contain the words of the text and their corresponding locations in the image.
 
-Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
-
 ## Starting point model and architecture 
 
 ![ConTextTransformer](readme_images/ConTextTransformer.png)
@@ -168,6 +166,36 @@ PD: The significant difference between the test loss and the validation loss at 
 ### Test 2: Performance of different pretrained CNN models used
 
 In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](#Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
+
+- We use 20 epochs to train both models.
+
+-- ShuffleNet --
+
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png) 
+![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_08_32.png)
+
+Accuracy TEST - 0.7299
+Loss TEST - 0.0640
+
+As we can see, the loss have deteriorate 31% with respect to ResNet50. This is probably due to the fact that shuffle net it is not as profound as ResNet50 and dose not have the same learning capacity.
+
+The model training took 1h 50m 42s(-25.9% less with respect to ResNet50.).
+
+We see that shufflenet gives us worse result than ResNet50, but it is faster to train.
+
+-- ES_ResneXt101 --
+
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png) 
+![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_23_16.png)
+
+Accuracy TEST - 0.7925
+Loss TEST - 0.0494
+
+As we can see, the loss have improved 1.32% with respect to ResNet50. 
+
+The model training took 4h 20m 20s (+51.17% more with respect to ResNet50.). The model took more time to train due to the fact that the model is more complex.
+
+We belive that this model with more epochs would probably exceed the ResNet50, but that means to spend more time and more computational power trainning.
 
 ### Test 3: Performance of different optimizers used
 
