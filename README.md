@@ -165,7 +165,7 @@ In this fourth test, we will observe the difference (improvement/deterioration) 
 
 ### Extra Test: Hyperparameter Tuning with Optuna
 
-In the final test, we will execute the hyperparameter tuning with Optuna implemented by us.
+In the final test, we will execute [the hyperparameter tuning with Optuna](#Hyperparameter-tuning-with-Optuna)  implemented by us.
 
 The hyperparameter tuning was conducted with the following configurations:
 
