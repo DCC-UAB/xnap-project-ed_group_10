@@ -159,14 +159,27 @@ In this third test, we will observe the difference (improvement/deterioration) i
 
 ### Test 4: Performance of different schedulers used
 
-In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
+In this fourth test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
 
 *RELLENAR*
 
 ### Extra Test: Hyperparameter Tuning with Optuna
 
-*RELLENAR*
+In the final test, we will execute the hyperparameter tuning with Optuna implemented by us.
 
+The hyperparameter tuning was conducted with the following configurations:
+
+* Number of trials: 4
+* Epochs per trial: 5
+* Search space:
+  * Learning rate: [1e-5, 1e-4, 1e-3]
+    * **The values used revolve around the initial learning rate (1e-4).
+  * Batch Size: [16, 32, 64]
+    * **The values used revolve around the initial batch size (32).
+* Sampler: TPE (Tree-structured Parzen Estimator)
+  * Which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
+
+*RELLENAR*
 
 ## To Improve (Sergi)
 
@@ -240,3 +253,14 @@ python main.py
 Xarxes Neuronals i Aprenentatge Profund
 Grau d'Enginyeria de Dades,
 UAB, 2023
+
+In the final test, we will execute the hyperparameter tuning with Optuna implemented by us.
+
+The hyperparameter tuning was conducted with the following configurations:
+
+* Number of trials: 4
+* Epochs per trial: 5
+* Search space:
+  * Learning rate: [1e-5, 1e-4, 1e-3]
+  * Batch Size: [16, 32, 64]
+* Sampler: TPE (Tree-structured Parzen Estimator), which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
