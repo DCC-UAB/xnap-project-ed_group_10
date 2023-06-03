@@ -19,13 +19,14 @@ https://github.com/lluisgomez/ConTextTransformer
 Transformer (CNN and Word Embeddings)
 
 ## Data
+
 We use the Con-Text dataset which is built from sub-categories of the ImageNet "building" and "place of business" sets to evaluate fine-grained classification. The dataset consists of 28 categories with 24,255 images in total. Note that this dataset is not specifically build for text recognition and thus not all the images have text in them. Moreover, high variability of text size, location, resolution and style and, uncontrolled environmental settings ( illumination ) make text recognition from this dataset harder.
 
 To provide the model with text information, we utilize OCR labels that contain the words of the text and their corresponding locations in the image.
 
 Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
-## Starting point model and architecture 
+## Starting point model and architecture
 
 ![ConTextTransformer](readme_images/ConTextTransformer.png)
 
@@ -39,7 +40,7 @@ The positional embedding is added element-wise to the image features.
 On the other hand, the input text is passed through a linear layer. The linear layer reduces the dimensionality of the input text features.
 This linear layer allows the model to capture contextual information and represent the text features in a lower-dimensional space that is consistent with the other input modalities
 
-The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information. 
+The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information.
 
 Finally, the output of the transformer encoder, corresponding to the CLS token, is passed through an MLP head.
 The MLP head consists of linear layers with GELU activation and dropout regularization. The final linear layer maps the features to the number of output classes.
@@ -137,13 +138,11 @@ The initial code had some errors both in its approach and structure.
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
 - On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
 
-
 ### Hyperparameter tuning with Optuna
 
 We have implemented a `hyperparameter_tuning.py` module using Optuna to find the best batch size and learning rate for our model and problem. Optuna is a powerful framework for hyperparameter optimization that intelligently explores the hyperparameter space to identify optimal configurations. By leveraging Optuna, we aim to maximize our model's performance by fine-tuning these key hyperparameters.
 
 It is important to note that the tests conducted to find the best hyperparameters were of a pilot nature and do not have sufficient strength to determine the optimal hyperparameter combination. This is because we significantly reduced the search space, the number of trials, and the number of epochs per trial to avoid waiting for more than 20 hours to perform a "decent" hyperparameter tuning.
-
 
 ## Tests done and Observations (Abel)
 
@@ -203,12 +202,11 @@ Below you can see some graphs comparing the results of the different trials.
 
 ![1685810890670](readme_images/sweepht.png)
 
-![1685810890670](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/readme_images/accht.png)![1685810890670](readme_images/lossht.png)
+![1685810890670](readme_images/accht.png)![1685810890670](readme_images/lossht.png)
 
 As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
 
 However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
-
 
 ## To Improve (Sergi)
 
