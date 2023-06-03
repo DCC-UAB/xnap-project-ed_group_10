@@ -30,31 +30,29 @@ The given code is a s
 
 The codebase for this project is structured as follows:
 
-├── data/  
-├── results/  
-├── src/  
-│   ├── data/  
-│   │   ├── data_loader.py  
-│   │   └── conTextDataset.py  
-│   ├── models/  
-│   │   ├── conTextTransformer.py  
-│   ├── utils/  
-│   │   ├── utils.py  
-│   │   ├── utils_visualization.py  
-│   │   └── train_test_labels_split.py  
-│   ├── config.py  
-│   ├── hyperparameter_tuning.py  
-│   ├── inference.py  
-│   ├── main.py  
-│   ├── train.py  
-│   └── test.py  
-├── environment.yml  
-├── README.md  
-└── LICENSE  
+├── data/
+├── results/
+├── src/
+│   ├── data/
+│   │   ├── data_loader.py
+│   │   └── conTextDataset.py
+│   ├── models/
+│   │   ├── conTextTransformer.py
+│   ├── utils/
+│   │   ├── utils.py
+│   │   ├── utils_visualization.py
+│   │   └── train_test_labels_split.py
+│   ├── config.py
+│   ├── hyperparameter_tuning.py
+│   ├── inference.py
+│   ├── main.py
+│   ├── train.py
+│   └── test.py
+├── environment.yml
+├── README.md
+└── LICENSE
 
 The `data` directory will contain all the data files. The `models` directory contains a subdirectory for saved models. The `results` directory contains subdirectories for training and evaluation results. The `src` directory contains the source code for the project, organized into subdirectories for data processing, model architectures, utility functions, visualization, training, and evaluation. The `config.py` file contains configuration parameters for the project, such as hyperparameters for the model and file paths for the data. The `requirements.txt` file lists the dependencies required to run the project. The `README.md` file contains instructions on how to set up and run the project, as well as information on the project's goals and structure. Finally, the `main.py` file is the entry point for running the project.
-
-
 
 ## Firsts executions
 
@@ -62,14 +60,20 @@ During the initial executions of the code, the model was trained on the MNIST da
 
 ## Changes done to the initial code
 
+The initial code had some errors both in its approach and structure.
+
+* Instead of using a Jupyter Notebook, the code has been restructured into independent modules to improve organization and facilitate maintenance.
+* One of the significant changes was the introduction of a validation set to evaluate the model's performance during training. Initially, 80% of the data was allocated to the `trainloader` and 20% to the `testloader`, and the train dataloader was used for both training and evaluating the model. Now, we have created a `validationloader` consisting of 20% of the `trainloader` to have a 60-20-20 split. Instead of using the train loader to evaluate the model, we can use the separate validation set to calculate the loss during model training.
+* Another noticeable change is that initially, the model's state was saved at the last epoch of training, and the goal was to maximize the accuracy of this state. In our case, we have made changes to keep the model's state at the epoch with the lowest loss. This change helps to avoid overfitting, saves resources, and improves the model's generalization. Additionally, we have mentioned that we are now focused on minimizing the loss rather than maximizing the accuracy. This is because the loss is a more sensitive measure to individual prediction errors of the model and is generally more interpretable compared to accuracy.
+* Furthermore, we have modified the loss function. Initially, the combination of the `log_softmax` and `nll_loss` functions was used, but it has been replaced with the `CrossEntropyLoss` function. The reason for this change is to simplify the code and use a commonly used loss function in the field.
 
 ## Improvements
 
 ### Different CNN pretrained models used
 
-- ResNet50 (Residual Network) is a variant of the ResNet (Residual Network) architecture consisting of 50 layers. ResNet was introduced to address the problem of performance decay as more layers are added to a deep neural network. It uses residual blocks that allow direct information flow across connection hops, making it easier to train deeper networks and improving accuracy.
-- SE_ResNeXt101 (Residual Network with Next) is an extension to the ResNet of 101 layers that focuses on the idea of "cardinal grouping" to further improve performance. Rather than having a single path of information within each residual block, ResNeXt uses multiple paths, called "transformation paths," which capture different forms of information and allow the residual blocks to be richer and more expressive. These transformation paths are realized by grouping the outputs of the previous block into multiple channels, which is known as "cardinality". Cardinality refers to the number of channels in each grouping. Furthermore, it combines the ideas of ResNet residual blocks with Squeeze-and-Excitation (SE) modules. SE modules were introduced to improve the network's attention span to specific features and highlight relevant information. These modules use a "squeeze" operation to reduce the dimension of the feature maps and an "excitation" operation to model the interdependencies between the channels and recalibrate them based on their importance.
-  -ShuffleNet is a convolutional neural network architecture designed for efficient computation and parameter reduction. It achieves efficiency by utilizing group convolutions and channel shuffling operations. The main idea behind ShuffleNet is to divide the input channels into groups and perform separate convolutions on each group. This reduces the number of parameters and computation compared to standard convolutions. After the group convolutions, a channel shuffling operation is applied to mix the information across different groups, allowing the network to capture diverse features. The channel shuffling operation involves rearranging the feature maps by grouping the channels from different groups together. This helps in enhancing the representation power of the network while maintaining a low computational cost. By using group convolutions and channel shuffling, ShuffleNet achieves a good balance between accuracy and efficiency. It has been shown to perform well on various tasks, especially in scenarios with limited computational resources such as mobile devices and embedded systems.
+- ResNet50 (Residual Network) is a variant of the ResNet architecture consisting of 50 layers. It has gained significant popularity in image classification tasks due to its remarkable performance. ResNet50 is a well-suited architecture for solving image classification problems for several reasons. Firstly, its deep structure allows it to capture intricate patterns and features present in images, enabling it to learn complex representations. This is especially beneficial when dealing with datasets that contain diverse and highly detailed visual information. Additionally, ResNet50's residual blocks facilitate the flow of information across connection hops, mitigating the problem of performance decay that often arises with deeper networks. By incorporating skip connections, ResNet50 can effectively address the vanishing gradient problem and accelerate the convergence of the network during training. These factors contribute to its ability to achieve state-of-the-art accuracy in image classification tasks.
+- SE_ResNeXt101 (Residual Network with Next) is an advanced variant of the ResNet architecture that demonstrates superior performance compared to ResNet50. Its increased depth, with 101 layers, allows it to capture more intricate patterns and representations, making it well-suited for complex image classification problems. SE_ResNeXt101 incorporates the concept of "cardinal grouping," which enhances the expressiveness of the residual blocks. By using multiple transformation paths within each block, it can capture diverse forms of information and increase the representation power of the network. Furthermore, SE_ResNeXt101 integrates Squeeze-and-Excitation (SE) modules, which adaptively recalibrate the importance of different channels based on their relevance. This attention mechanism enables the network to focus on the most informative features, leading to improved discriminative ability. However, it is important to note that the increased depth and complexity of SE_ResNeXt101 come at the cost of higher computational requirements. Therefore, it may be more suitable for scenarios where computational resources are abundant.
+- ShuffleNet is an alternative convolutional neural network architecture designed to strike a balance between efficiency and accuracy. It offers computational advantages by employing group convolutions and channel shuffling operations. This architecture significantly reduces the number of parameters and computational complexity compared to standard convolutions. Consequently, ShuffleNet is more computationally efficient, making it particularly appealing for resource-constrained environments such as mobile devices or embedded systems. However, it is crucial to consider that this efficiency gain comes with a trade-off in terms of representation power. ShuffleNet's reduced computational cost limits its capacity to capture intricate details and complex patterns compared to deeper architectures like ResNet50 or SE_ResNeXt101. While it can still achieve reasonably good accuracy, it may not perform as well as the aforementioned architectures in tasks that require fine-grained discrimination or handling highly complex datasets.
 
 ### Different Word-Embedding pretrained models used
 
@@ -110,13 +114,11 @@ Based on the initial executions and observations, some potential areas for impro
 
 The Weights & Biases package is integrated into the code to monitor the network's learning progress. It provides visualizations and metrics to track the model's performance during training. By utilizing Weights & Biases, it becomes easier to analyze and interpret the training process, identify potential issues, and make informed decisions for model improvement.
 
-
 PHOTOS OF THE METRICS AND RESULTS
-## Inferences 
 
+## Inferences
 
-## Conclusions 
-
+## Conclusions
 
 ## How to Run the code?
 
