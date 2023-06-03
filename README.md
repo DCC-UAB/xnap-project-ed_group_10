@@ -19,12 +19,30 @@ https://github.com/lluisgomez/ConTextTransformer
 Transformer (CNN and Word Embeddings)
 
 ## Data
+We use the Con-Text dataset which is built from sub-categories of the ImageNet "building" and "place of business" sets to evaluate fine-grained classification. The dataset consists of 28 categories with 24,255 images in total. Note that this dataset is not specifically build for text recognition and thus not all the images have text in them. Moreover, high variability of text size, location, resolution and style and, uncontrolled environmental settings ( illumination ) make text recognition from this dataset harder.
 
-25,255 images from ImageNet of 28 categories (do not reuse the old OCR)  -  https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
+To provide the model with text information, we utilize OCR labels that contain the words of the text and their corresponding locations in the image.
 
-## Starting point model and architecture (Biel)
+Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
-The given code is a s
+## Starting point model and architecture 
+
+![ConTextTransformer](readme_images/ConTextTransformer.png)
+
+The starting point model and architecture consist in using two model:
+
+First, the input image is passed through a pre-trained convolutional neural network (CNN) model such as ResNet-50.
+The last two layers of the CNN model are removed to obtain the intermediate features.
+Then the intermediate image features are flattened and passed through a linear layer to reduce the dimensionality to the specified dim. An embedding matrix is created to capture positional information of the image features.
+The positional embedding is added element-wise to the image features.
+
+On the other hand, the input text is passed through a linear layer. The linear layer reduces the dimensionality of the input text features.
+This linear layer allows the model to capture contextual information and represent the text features in a lower-dimensional space that is consistent with the other input modalities
+
+The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information. 
+
+Finally, the output of the transformer encoder, corresponding to the CLS token, is passed through an MLP head.
+The MLP head consists of linear layers with GELU activation and dropout regularization. The final linear layer maps the features to the number of output classes.
 
 ## Code structure
 
