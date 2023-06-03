@@ -8,71 +8,62 @@ The objective is to perform fine-grained classification, which involves identify
 
 ## Objectives
 
-Classify businesses on street view images, combining textual and visual features
+Classify businesses on street view images, combining textual and visual features - Fine-grained Classification
+
+## Reference Github Repository
+
+https://github.com/lluisgomez/ConTextTransformer
 
 ## Type of Model
 
 Transformer (CNN and Word Embeddings)
 
-## Task
-
-Fine-grained Classification
-
 ## Data
 
 25,255 images from ImageNet of 28 categories (do not reuse the old OCR)  -  https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
-## Starting point
+## Starting point model and architecture (Biel)
 
-https://github.com/lluisgomez/ConTextTransformer
+The given code is a s
 
 ## Code structure
 
 The codebase for this project is structured as follows:
 
-├── data/
-├── results/
-├── src/
-│   ├── data/
-│   │   ├── data_loader.py
-│   │   └── conTextDataset.py
-│   ├── models/
-│   │   ├── conTextTransformer.py
-│   ├── utils/
-│   │   ├── utils.py
-│   │   ├── utils_visualization.py
-│   │   └── train_test_labels_split.py
-│   ├── config.py
-│   ├── hyperparameter_tuning.py
-│   ├── inference.py
-│   ├── main.py
-│   ├── train.py
-│   └── test.py
-├── environment.yml
-├── README.md
-└── LICENSE
+├── data/  
+├── results/  
+├── src/  
+│   ├── data/  
+│   │   ├── data_loader.py  
+│   │   └── conTextDataset.py  
+│   ├── models/  
+│   │   ├── conTextTransformer.py  
+│   ├── utils/  
+│   │   ├── utils.py  
+│   │   ├── utils_visualization.py  
+│   │   └── train_test_labels_split.py  
+│   ├── config.py  
+│   ├── hyperparameter_tuning.py  
+│   ├── inference.py  
+│   ├── main.py  
+│   ├── train.py  
+│   └── test.py  
+├── environment.yml  
+├── README.md  
+└── LICENSE  
 
 The `data` directory will contain all the data files. The `models` directory contains a subdirectory for saved models. The `results` directory contains subdirectories for training and evaluation results. The `src` directory contains the source code for the project, organized into subdirectories for data processing, model architectures, utility functions, visualization, training, and evaluation. The `config.py` file contains configuration parameters for the project, such as hyperparameters for the model and file paths for the data. The `requirements.txt` file lists the dependencies required to run the project. The `README.md` file contains instructions on how to set up and run the project, as well as information on the project's goals and structure. Finally, the `main.py` file is the entry point for running the project.
 
-## How to Run the code?
 
-The given code is a simple CNN example training on the MNIST dataset. It shows how to set up the [Weights &amp; Biases](https://wandb.ai/site)  package to monitor how your network is learning, or not.
-
-Before running the code you have to create a local environment with conda and activate it. The provided [environment.yml](https://github.com/DCC-UAB/XNAP-Project/environment.yml) file has all the required dependencies. Run the following command: ``conda env create --file environment.yml `` to create a conda environment with all the required dependencies and then activate it:
-
-```
-conda activate xnap-example
-```
-
-To run the example code:
-
-```
-python main.py
-```
 
 ## Firsts executions
 
 During the initial executions of the code, the model was trained on the MNIST dataset using a simple CNN architecture. The purpose of these executions was to set up the environment, verify the code's functionality, and ensure that the dependencies were properly installed.
+
+## Changes done to the initial code
+
+
+## Improvements
 
 ### Different CNN pretrained models used
 
@@ -101,16 +92,11 @@ During the initial executions of the code, the model was trained on the MNIST da
   The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
   On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
 
-## Tests done and Observations
+## Tests done and Observations (Abel)
 
-Several tests were conducted to validate the code and make observations. These tests included running the training process and evaluating the performance of the model on the MNIST dataset. The observations made during these tests are:
+### Test 1
 
-- The Weights & Biases package is integrated into the code, allowing for monitoring and tracking of the network's learning progress.
-- The code structure follows a modular organization, separating different functionalities into respective directories.
-- The code utilizes pretrained CNN and word embedding models such as ResNet50 and FastText.
-- The ConTextTransformer architecture is used to combine visual and textual features for fine-grained classification.
-
-## To Improve
+## To Improve (Sergi)
 
 Based on the initial executions and observations, some potential areas for improvement are identified:
 
@@ -126,10 +112,27 @@ The Weights & Biases package is integrated into the code to monitor the network'
 
 
 PHOTOS OF THE METRICS AND RESULTS
+## Inferences 
 
 
-## Results
+## Conclusions 
 
+
+## How to Run the code?
+
+The given code is a simple CNN example training on the MNIST dataset. It shows how to set up the [Weights &amp; Biases](https://wandb.ai/site)  package to monitor how your network is learning, or not.
+
+Before running the code you have to create a local environment with conda and activate it. The provided [environment.yml](https://github.com/DCC-UAB/XNAP-Project/environment.yml) file has all the required dependencies. Run the following command: ``conda env create --file environment.yml `` to create a conda environment with all the required dependencies and then activate it:
+
+```
+conda activate xnap-example
+```
+
+To run the example code:
+
+```
+python main.py
+```
 
 ## Bibliografia
 
