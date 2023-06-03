@@ -19,9 +19,12 @@ https://github.com/lluisgomez/ConTextTransformer
 Transformer (CNN and Word Embeddings)
 
 ## Data
+
 We use the Con-Text dataset which is built from sub-categories of the ImageNet "building" and "place of business" sets to evaluate fine-grained classification. The dataset consists of 28 categories with 24,255 images in total. Note that this dataset is not specifically build for text recognition and thus not all the images have text in them. Moreover, high variability of text size, location, resolution and style and, uncontrolled environmental settings ( illumination ) make text recognition from this dataset harder.
 
 To provide the model with text information, we utilize OCR labels that contain the words of the text and their corresponding locations in the image.
+
+Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
 ## Starting point model and architecture 
 
@@ -37,7 +40,7 @@ The positional embedding is added element-wise to the image features.
 On the other hand, the input text is passed through a linear layer. The linear layer reduces the dimensionality of the input text features.
 This linear layer allows the model to capture contextual information and represent the text features in a lower-dimensional space that is consistent with the other input modalities
 
-The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information. 
+The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information.
 
 Finally, the output of the transformer encoder, corresponding to the CLS token, is passed through an MLP head.
 The MLP head consists of linear layers with GELU activation and dropout regularization. The final linear layer maps the features to the number of output classes.
@@ -129,19 +132,17 @@ The initial code had some errors both in its approach and structure.
 - MultiStepLR: The MultiStepLR scheduler is the default scheduler provided in our base project. It is a learning rate adjustment strategy that reduces the learning rate at specific moments during training. It requires a list of milestones (epochs) and reduces the learning rate by a factor of gamma at each of these milestones.
   In our case, we set a list of milestones [15, 30] and a gamma factor of 0.1. This means that the learning rate was reduced by a factor of 0.1 at epochs 15 and 30.
 - ReduceLROnPlateau: The ReduceLROnPlateau scheduler is a learning rate adjustment strategy that reduces the learning rate when a model's improvement reaches a plateau. It monitors a metric, such as validation loss, and if no improvement is observed after a certain number of epochs, it reduces the learning rate by a predetermined factor. The ReduceLROnPlateau scheduler takes into account the evolution of the metric of interest and dynamically adjusts the learning rate based on that information. Therefore, if the model has reached a plateau and is not improving, the scheduler will reduce the learning rate to allow for more precise adjustments and potentially escape of local min.
-  In our case, the ReduceLROnPlateau scheduler will dynamically adjust the learning rate based on the loss performance. We have set a threshold of 0.1 to indicate that the loss needs to improve by at least 1% to be considered an improvement. If no improvement is observed in the loss for 3 consecutive epochs (patience), the learning rate will be reduced by a factor of 0.1.
+  In our case, the ReduceLROnPlateau scheduler will dynamically adjust the learning rate based on the loss performance. We have set a threshold of 0.1 to indicate that the loss needs to improve by at least 1% to be considered an improvement. If no improvement is observed in the loss for 5 consecutive epochs (patience), the learning rate will be reduced by a factor of 0.1.
 
   The hypothesis behind the change in scheduler is as follows:
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
 - On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
-
 
 ### Hyperparameter tuning with Optuna
 
 We have implemented a `hyperparameter_tuning.py` module using Optuna to find the best batch size and learning rate for our model and problem. Optuna is a powerful framework for hyperparameter optimization that intelligently explores the hyperparameter space to identify optimal configurations. By leveraging Optuna, we aim to maximize our model's performance by fine-tuning these key hyperparameters.
 
 It is important to note that the tests conducted to find the best hyperparameters were of a pilot nature and do not have sufficient strength to determine the optimal hyperparameter combination. This is because we significantly reduced the search space, the number of trials, and the number of epochs per trial to avoid waiting for more than 20 hours to perform a "decent" hyperparameter tuning.
-
 
 ## Tests done and Observations (Abel)
 
@@ -167,47 +168,17 @@ PD: The significant difference between the test loss and the validation loss at 
 
 In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](#Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
 
-- We use 20 epochs to train both models.
-
--- ShuffleNet --
-
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png) 
-![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_08_32.png)
-
-Accuracy TEST - 0.7299
-Loss TEST - 0.0640
-
-As we can see, the loss have deteriorate 31% with respect to ResNet50. This is probably due to the fact that shuffle net it is not as profound as ResNet50 and dose not have the same learning capacity.
-
-The model training took 1h 50m 42s(-25.9% less with respect to ResNet50.).
-
-We see that shufflenet gives us worse result than ResNet50, but it is faster to train.
-
--- ES_ResneXt101 --
-
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png) 
-![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_23_16.png)
-
-Accuracy TEST - 0.7925
-Loss TEST - 0.0494
-
-As we can see, the loss have improved 1.32% with respect to ResNet50. 
-
-The model training took 4h 20m 20s (+51.17% more with respect to ResNet50.). The model took more time to train due to the fact that the model is more complex.
-
-We belive that this model with more epochs would probably exceed the ResNet50, but that means to spend more time and more computational power trainning.
-
 ### Test 3: Performance of different optimizers used
 
 In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different optimizers](#Different-Optimizers-used). In addition, we will examine the performance of the AdamW optimizer.
 
-*RELLENAR*
+*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
 
 ### Test 4: Performance of different schedulers used
 
 In this fourth test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
 
-*RELLENAR*
+*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
 
 ### Extra Test: Hyperparameter Tuning with Optuna
 
@@ -225,7 +196,15 @@ The hyperparameter tuning was conducted with the following configurations:
 * Sampler: TPE (Tree-structured Parzen Estimator)
   * Which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
 
-*RELLENAR*
+Below you can see some graphs comparing the results of the different trials.
+
+![1685810890670](readme_images/sweepht.png)
+
+![1685810890670](readme_images/accht.png)![1685810890670](readme_images/lossht.png)
+
+As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
+
+However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
 
 ## To Improve (Sergi)
 
