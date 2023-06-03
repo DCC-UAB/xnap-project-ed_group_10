@@ -151,17 +151,19 @@ PD: The significant difference between the test loss and the validation loss at 
 
 In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](#Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
 
+*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
+
 ### Test 3: Performance of different optimizers used
 
 In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different optimizers](#Different-Optimizers-used). In addition, we will examine the performance of the AdamW optimizer.
 
-*RELLENAR*
+*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
 
 ### Test 4: Performance of different schedulers used
 
 In this fourth test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
 
-*RELLENAR*
+*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
 
 ### Extra Test: Hyperparameter Tuning with Optuna
 
@@ -179,7 +181,16 @@ The hyperparameter tuning was conducted with the following configurations:
 * Sampler: TPE (Tree-structured Parzen Estimator)
   * Which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
 
-*RELLENAR*
+Below you can see some graphs comparing the results of the different trials.
+
+![1685810890670](readme_images/sweepht.png)
+
+![1685810890670](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/readme_images/accht.png)![1685810890670](readme_images/lossht.png)
+
+As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
+
+However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
+
 
 ## To Improve (Sergi)
 
