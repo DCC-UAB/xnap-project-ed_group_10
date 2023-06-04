@@ -1,3 +1,5 @@
+
+
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11122316&assignment_repo_type=AssignmentRepo)
 
 # XNAP-Project Business Classification
@@ -19,13 +21,14 @@ https://github.com/lluisgomez/ConTextTransformer
 Transformer (CNN and Word Embeddings)
 
 ## Data
+
 We use the Con-Text dataset which is built from sub-categories of the ImageNet "building" and "place of business" sets to evaluate fine-grained classification. The dataset consists of 28 categories with 24,255 images in total. Note that this dataset is not specifically build for text recognition and thus not all the images have text in them. Moreover, high variability of text size, location, resolution and style and, uncontrolled environmental settings ( illumination ) make text recognition from this dataset harder.
 
 To provide the model with text information, we utilize OCR labels that contain the words of the text and their corresponding locations in the image.
 
 Source of the dataset: https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html
 
-## Starting point model and architecture 
+## Starting point model and architecture
 
 ![ConTextTransformer](readme_images/ConTextTransformer.png)
 
@@ -39,7 +42,7 @@ The positional embedding is added element-wise to the image features.
 On the other hand, the input text is passed through a linear layer. The linear layer reduces the dimensionality of the input text features.
 This linear layer allows the model to capture contextual information and represent the text features in a lower-dimensional space that is consistent with the other input modalities
 
-The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information. 
+The image features and text features are concatenated along the sequence dimension. The concatenated features are passed through a stack of transformer encoder layers. Each encoder layer applies self-attention and feed-forward neural networks to capture contextual information.
 
 Finally, the output of the transformer encoder, corresponding to the CLS token, is passed through an MLP head.
 The MLP head consists of linear layers with GELU activation and dropout regularization. The final linear layer maps the features to the number of output classes.
@@ -48,27 +51,27 @@ The MLP head consists of linear layers with GELU activation and dropout regulari
 
 The codebase for this project is structured as follows:
 
-├── data/
-├── results/
-├── src/
-│   ├── data/
-│   │   ├── data_loader.py
-│   │   └── conTextDataset.py
-│   ├── models/
-│   │   ├── conTextTransformer.py
-│   ├── utils/
-│   │   ├── utils.py
-│   │   ├── utils_visualization.py
-│   │   └── train_test_labels_split.py
-│   ├── config.py
-│   ├── hyperparameter_tuning.py
-│   ├── inference.py
-│   ├── main.py
-│   ├── train.py
-│   └── test.py
-├── environment.yml
-├── README.md
-└── LICENSE
+├── data/  
+├── results/  
+├── src/  
+│   ├── data/  
+│   │   ├── data_loader.py  
+│   │   └── conTextDataset.py  
+│   ├── models/  
+│   │   ├── conTextTransformer.py  
+│   ├── utils/  
+│   │   ├── utils.py  
+│   │   ├── utils_visualization.py  
+│   │   └── train_test_labels_split.py  
+│   ├── config.py  
+│   ├── hyperparameter_tuning.py  
+│   ├── inference.py  
+│   ├── main.py  
+│   ├── train.py  
+│   └── test.py  
+├── environment.yml  
+├── README.md  
+└── LICENSE  
 
 The `data` directory will contain all the data files. The `results` directory will contain all the results of the training and testing. Apart from wandb they are also saved in local. The `src` directory will contain all the code files. The `data_loader.py` file will contain the code which created the loaders to to load the data. The `conTextDataset.py` file will contain the code to load the data with its transformations. The `conTextTransformer.py` file will contain the code to create the model and all its layers. The `utils.py` file will contain `make` function which will start all the loaders, datasets objects, schedulers, etc. and also contains an auxiliar function for inference testing. The `utils_visualization.py` file will contain the code to create the plots of the training and testing. The `train_test_labels_split.py` file will contain the code to separate all the train and test data from the initial ORC labels and images that the dataset contains. The `config.py` file will contain the code with all variables used to have all them in same place. The `hyperparameter_tuning.py` file will contain the code to tune the hyperparameters of the model. The `inference.py` file will contain the code to test the model with a single image. The `main.py` file will contain the code to start the pipeline. The `train.py` file will contain the code to train the model. The `test.py` file will contain the code to test the model. The `environment.yml` file will contain the code with the environment configuration. The `README.md` file will contain the code with the information of the project and finally the `LICENSE` file will contain the code with the license of the project.
 
@@ -137,13 +140,11 @@ The initial code had some errors both in its approach and structure.
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
 - On the other hand, the ReduceLROnPlateau scheduler offers greater flexibility and adaptability. It closely monitors the metric of interest and reduces the learning rate when a stagnation in the model's performance is detected. This allows for more precise and timely adjustments to the learning rate, which can help avoid local minima and achieve more efficient convergence.
 
-
 ### Hyperparameter tuning with Optuna
 
 We have implemented a `hyperparameter_tuning.py` module using Optuna to find the best batch size and learning rate for our model and problem. Optuna is a powerful framework for hyperparameter optimization that intelligently explores the hyperparameter space to identify optimal configurations. By leveraging Optuna, we aim to maximize our model's performance by fine-tuning these key hyperparameters.
 
 It is important to note that the tests conducted to find the best hyperparameters were of a pilot nature and do not have sufficient strength to determine the optimal hyperparameter combination. This is because we significantly reduced the search space, the number of trials, and the number of epochs per trial to avoid waiting for more than 20 hours to perform a "decent" hyperparameter tuning.
-
 
 ## Tests done and Observations (Abel)
 
@@ -155,7 +156,7 @@ In the first test, we can observe the improvement in accuracy and loss after mak
 
 ![1685805842906](readme_images/1685805842906.png) ![1685805888237](readme_images/1685805888237.png)
 
-![1685805590593](readme_images/1685805590593.png)![1685805986704](readme_images/1685805986704.png)
+![1685805590593](readme_images/1685805590593.png) ![1685805986704](readme_images/1685805986704.png)
 
 - We use 20 epochs to train this model.
 
@@ -193,9 +194,9 @@ The hyperparameter tuning was conducted with the following configurations:
 * Epochs per trial: 5
 * Search space:
   * Learning rate: [1e-5, 1e-4, 1e-3]
-    * **The values used revolve around the initial learning rate (1e-4).
+    * The values used revolve around the initial learning rate (1e-4).
   * Batch Size: [16, 32, 64]
-    * **The values used revolve around the initial batch size (32).
+    * The values used revolve around the initial batch size (32).
 * Sampler: TPE (Tree-structured Parzen Estimator)
   * Which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
 
@@ -203,22 +204,23 @@ Below you can see some graphs comparing the results of the different trials.
 
 ![1685810890670](readme_images/sweepht.png)
 
-![1685810890670](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/readme_images/accht.png)![1685810890670](readme_images/lossht.png)
+![1685810890670](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/readme_images/accht.png)
+
+![1685810890670](readme_images/lossht.png)
 
 As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
 
 However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
 
+## To Improve
 
-## To Improve (Sergi)
+Based on the initial executions and the improvements we already implemented, some potential areas for improvement are identified:
 
-Based on the initial executions and observations, some potential areas for improvement are identified:
-
-- Explore different CNN pretrained models such as SE_ResNeXt101 to compare their performance.
-- Experiment with different word-embedding pretrained models such as BERT to capture more contextual information.
-- Fine-tune the hyperparameters of the model to optimize its performance on the specific business classification task.
-- Implement data augmentation techniques to increase the diversity and size of the training dataset.
-- Consider applying techniques like transfer learning or domain adaptation to improve the model's generalization to street view images.
+- Explore different CNN pretrained models such as InceptionV3 to compare their performance.
+- Experiment with different word-embedding pretrained models such as ELMO (Embeddings from Language Models) or GPT (Generative Pre-trained Transformer) to capture more contextual information. These models have shown promising results in various NLP tasks by leveraging the power of transformer-based architectures.
+- Fine-tune the hyperparameters of the model to optimize its performance on the specific business classification task. This can include adjusting the learning rate, batch size, optimizer, and regularization techniques (e.g., dropout) to find the best configuration for the given dataset.
+- Experiment with different loss functions tailored to the fine-grained classification task. For example, focal loss or class-balanced loss can be explored to handle class imbalance and focus more on challenging samples during training.
+- Conduct extensive model evaluation and analysis, including performance metrics, confusion matrix, and visualization of model predictions, to gain insights into the model's strengths and weaknesses. This analysis can guide further improvements and help understand the limitations of the current approach.
 
 ## Weight & Bias
 
@@ -248,13 +250,58 @@ WANDB saved variables page:
 
 ## Inferences
 
-## Inferences
+It is also been implemented a script to make inferences with the trained model. The script is called inference.py.
+The main function consists of predicting the bussiness class of a given image. First we load the pretrained model and the image to predict. Then we introduce the image into the model with its OCR labels (text that can be found in the image) and we get the label which has the highest probability as a result.
 
-## Conclusions
+We make two tests for each image, one with the OCR labels and another without them. The results are the following:
+
+### Test 1:
+
+<img src="data\Summertown-1080x675.jpg" height="300">
+
+![image](readme_images/inference1.png)
+
+### Test 2:
+
+<img src="data\mcdonalds.jpg" height="300">
+
+![image](readme_images/inference2.png)
+
+### Test 3:
+
+<img src="data\tienda-tabaco.jpg" height="300">
+
+![image](readme_images/inference3.png)
+
+### Test 4:
+
+<img src="data\hand_write.png" height="300">
+
+![image](readme_images/inference4.png)
+
+### Test 5:
+
+<img src="data\bussiness.png" height="300">
+
+![image](readme_images/inference5.png)
+
+## General Conclusions
+
+In this project, we aimed to classify businesses in street view images using a combination of visual and textual features. We used a Transformer-based model that leveraged convolutional neural networks (CNN) for image feature extraction and word embeddings for text feature extraction.
+
+The project focused on fine-grained classification, where we aimed to identify the specific type of business among 28 different categories. We utilized the Con-Text dataset, which consisted of 25,255 images from ImageNet and included OCR labels for text information.
+
+We started with the ConTextTransformer repository as our base code and made several improvements and modifications. We restructured the code into independent modules, introduced a validation set for evaluating the model's performance, and changed the model's state saving to the epoch with the lowest loss. We also modified the loss function to use CrossEntropyLoss for simplicity and numerical stability.
+
+Furthermore, we explored different pretrained CNN models (ResNet50, SE_ResNeXt101, ShuffleNet) and word-embedding models (FastText, BERT) to enhance the model's performance and capture intricate visual and textual information.
+
+We also experimented with different optimizers (Adam, AdamW) and learning rate schedulers (MultiStepLR, ReduceLROnPlateau) to improve training efficiency and convergence.
+
+Overall, this project aimed to develop a robust and accurate model for classifying businesses in street view images. The combination of visual and textual features allowed us to capture relevant information and achieve fine-grained classification. The improvements made to the initial code, along with the exploration of different models, optimizers, and learning rate schedulers, aimed to enhance the model's performance.
+
+By implementing these modifications and improvements, we expect to achieve a highly accurate and reliable business classification model that can be applied to real-world scenarios, such as urban planning, business analysis, and location-based services but it needs further improvements to achieve this goal as the best accuracy achieved was 85%.
 
 ## How to Run the code?
-
-The given code is a simple CNN example training on the MNIST dataset. It shows how to set up the [Weights &amp; Biases](https://wandb.ai/site)  package to monitor how your network is learning, or not.
 
 Before running the code you have to create a local environment with conda and activate it. The provided [environment.yml](https://github.com/DCC-UAB/XNAP-Project/environment.yml) file has all the required dependencies. Run the following command: ``conda env create --file environment.yml `` to create a conda environment with all the required dependencies and then activate it:
 
@@ -268,6 +315,20 @@ To run the example code:
 python main.py
 ```
 
+Once created the conda environment and activated it, you must configure the variables in the `config.py` file.
+
+Whenever we have all the variables configured, then run the code with the following command to execute the `main.py` script to run the training, test and inference processes:
+
+```
+python ./src/main.py
+```
+
+To run the hyperparameter tuning with Optuna:
+
+```
+python ./src/hyperparameter_tuning.py
+```
+
 ## Bibliografia
 
 * Seref Karaoglu. (2021). Business Image Dataset. Retrieved from [https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html](https://staff.fnwi.uva.nl/s.karaoglu/datasetWeb/Dataset.html)
@@ -279,17 +340,10 @@ python main.py
 - Biel Castellarnau Ruiz 1599417@uab.cat
 - Sergi Garriga Mas 1606989@uab.cat
 
-Xarxes Neuronals i Aprenentatge Profund
-Grau d'Enginyeria de Dades,
-UAB, 2023
+Xarxes Neuronals i Aprenentatge Profund,  
+Grau d'Enginyeria de Dades, UAB,   
+Curs 2022-2023  
 
-In the final test, we will execute the hyperparameter tuning with Optuna implemented by us.
-
-The hyperparameter tuning was conducted with the following configurations:
-
-* Number of trials: 4
-* Epochs per trial: 5
-* Search space:
-  * Learning rate: [1e-5, 1e-4, 1e-3]
-  * Batch Size: [16, 32, 64]
-* Sampler: TPE (Tree-structured Parzen Estimator), which optimizes the search space to avoid testing all possible combinations (it progressively approximates the optimal solution).
+<img src="readme_images/sergi.png" height="100">
+<img src="readme_images/abel.png" height="100">
+<img src="readme_images/biel.png" height="100">
