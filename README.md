@@ -1,5 +1,3 @@
-
-
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11122316&assignment_repo_type=AssignmentRepo)
 
 # XNAP-Project Business Classification
@@ -51,27 +49,27 @@ The MLP head consists of linear layers with GELU activation and dropout regulari
 
 The codebase for this project is structured as follows:
 
-├── data/  
-├── results/  
-├── src/  
-│   ├── data/  
-│   │   ├── data_loader.py  
-│   │   └── conTextDataset.py  
-│   ├── models/  
-│   │   ├── conTextTransformer.py  
-│   ├── utils/  
-│   │   ├── utils.py  
-│   │   ├── utils_visualization.py  
-│   │   └── train_test_labels_split.py  
-│   ├── config.py  
-│   ├── hyperparameter_tuning.py  
-│   ├── inference.py  
-│   ├── main.py  
-│   ├── train.py  
-│   └── test.py  
-├── environment.yml  
-├── README.md  
-└── LICENSE  
+├── data/
+├── results/
+├── src/
+│   ├── data/
+│   │   ├── data_loader.py
+│   │   └── conTextDataset.py
+│   ├── models/
+│   │   ├── conTextTransformer.py
+│   ├── utils/
+│   │   ├── utils.py
+│   │   ├── utils_visualization.py
+│   │   └── train_test_labels_split.py
+│   ├── config.py
+│   ├── hyperparameter_tuning.py
+│   ├── inference.py
+│   ├── main.py
+│   ├── train.py
+│   └── test.py
+├── environment.yml
+├── README.md
+└── LICENSE
 
 The `data` directory will contain all the data files. The `results` directory will contain all the results of the training and testing. Apart from wandb they are also saved in local. The `src` directory will contain all the code files. The `data_loader.py` file will contain the code which created the loaders to to load the data. The `conTextDataset.py` file will contain the code to load the data with its transformations. The `conTextTransformer.py` file will contain the code to create the model and all its layers. The `utils.py` file will contain `make` function which will start all the loaders, datasets objects, schedulers, etc. and also contains an auxiliar function for inference testing. The `utils_visualization.py` file will contain the code to create the plots of the training and testing. The `train_test_labels_split.py` file will contain the code to separate all the train and test data from the initial ORC labels and images that the dataset contains. The `config.py` file will contain the code with all variables used to have all them in same place. The `hyperparameter_tuning.py` file will contain the code to tune the hyperparameters of the model. The `inference.py` file will contain the code to test the model with a single image. The `main.py` file will contain the code to start the pipeline. The `train.py` file will contain the code to train the model. The `test.py` file will contain the code to test the model. The `environment.yml` file will contain the code with the environment configuration. The `README.md` file will contain the code with the information of the project and finally the `LICENSE` file will contain the code with the license of the project.
 
@@ -172,8 +170,8 @@ PD: The significant difference between the test loss and the validation loss at 
 
 #### -- ShuffleNet --
 
-<img src="readme_images/W&B Chart 3_6_2023 19_08_17.png" height="200">
-<img src="readme_images/W&B Chart 3_6_2023 19_08_32.png" height="200">
+`<img src="readme_images/W&B Chart 3_6_2023 19_08_17.png" height="200">`
+`<img src="readme_images/W&B Chart 3_6_2023 19_08_32.png" height="200">`
 
 - Accuracy TEST - 0.7299
 - Loss TEST - 0.0640
@@ -186,10 +184,10 @@ We see that shufflenet gives us worse result than ResNet50, but it is faster to 
 
 #### -- ES_ResneXt101 --
 
-<img src="readme_images/W&B Chart 3_6_2023 19_23_05.png" height="200">
-<img src="readme_images/W&B Chart 3_6_2023 19_23_16.png" height="200">
+`<img src="readme_images/W&B Chart 3_6_2023 19_23_05.png" height="200">`
+`<img src="readme_images/W&B Chart 3_6_2023 19_23_16.png" height="200">`
 
-- Accuracy TEST - 0.7925  
+- Accuracy TEST - 0.7925
 - Loss TEST - 0.0494
 
 As we can see, the loss have improved 1.32% with respect to ResNet50.
@@ -246,9 +244,7 @@ The hyperparameter tuning was conducted with the following configurations:
 
 Below you can see some graphs comparing the results of the different trials.
 
-![1685810890670](readme_images/sweepht.png)
-![1685810890670](readme_images/accht.png)
-![1685810890670](readme_images/lossht.png)
+![1685810890670](readme_images/sweepht.png) ![1685810890670](readme_images/accht.png) ![1685810890670](readme_images/lossht.png)
 
 As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
 
@@ -256,9 +252,7 @@ However, it's important to note that due to the limited number of epochs in this
 
 As I mentioned before, since 5 epochs is not significant enough to determine whether a batch size of 64 and a learning rate of 0.0001 are the best hyperparameters, we have trained the model with these settings for 30 epochs.
 
-![1685810890670](readme_images/htloss.png)![1685810890670](readme_images/httrain1.png)
-
-![1685825087223](readme_images/hthtlr.png)![1685810890670](readme_images/htresum.png)
+![1685810890670](readme_images/htloss.png) ![1685810890670](readme_images/httrain1.png) ![1685825087223](readme_images/hthtlr.png) ![1685810890670](readme_images/htresum.png)
 
 As we can see, the results are not bad, but they are slightly worse than using a batch size of 16 and a learning rate of 0.0001. The reason why these hyperparameters were better with 5 epochs is that with a larger batch size and learning rate, the model is able to learn faster in the initial epochs, but afterwards it can lead to oscillations in the model weights and make it difficult to converge to an optimal solution.
 
@@ -388,9 +382,9 @@ python ./src/hyperparameter_tuning.py
 - Biel Castellarnau Ruiz 1599417@uab.cat
 - Sergi Garriga Mas 1606989@uab.cat
 
-Xarxes Neuronals i Aprenentatge Profund,  
-Grau d'Enginyeria de Dades, UAB,   
-Curs 2022-2023  
+**Xarxes Neuronals i Aprenentatge Profund,
+Grau d'Enginyeria de Dades, UAB,
+Curs 2022-2023**
 
 <img src="readme_images/sergi.png" height="100">
 <img src="readme_images/abel.png" height="100">
