@@ -49,27 +49,27 @@ The MLP head consists of linear layers with GELU activation and dropout regulari
 
 The codebase for this project is structured as follows:
 
-├── data/
-├── results/
-├── src/
-│   ├── data/
-│   │   ├── data_loader.py
-│   │   └── conTextDataset.py
-│   ├── models/
-│   │   ├── conTextTransformer.py
-│   ├── utils/
-│   │   ├── utils.py
-│   │   ├── utils_visualization.py
-│   │   └── train_test_labels_split.py
-│   ├── config.py
-│   ├── hyperparameter_tuning.py
-│   ├── inference.py
-│   ├── main.py
-│   ├── train.py
-│   └── test.py
-├── environment.yml
-├── README.md
-└── LICENSE
+├── data/  
+├── results/  
+├── src/  
+│   ├── data/  
+│   │   ├── data_loader.py  
+│   │   └── conTextDataset.py  
+│   ├── models/  
+│   │   ├── conTextTransformer.py  
+│   ├── utils/  
+│   │   ├── utils.py  
+│   │   ├── utils_visualization.py  
+│   │   └── train_test_labels_split.py  
+│   ├── config.py  
+│   ├── hyperparameter_tuning.py  
+│   ├── inference.py  
+│   ├── main.py  
+│   ├── train.py  
+│   └── test.py  
+├── environment.yml  
+├── README.md  
+└── LICENSE  
 
 The `data` directory will contain all the data files. The `results` directory will contain all the results of the training and testing. Apart from wandb they are also saved in local. The `src` directory will contain all the code files. The `data_loader.py` file will contain the code which created the loaders to to load the data. The `conTextDataset.py` file will contain the code to load the data with its transformations. The `conTextTransformer.py` file will contain the code to create the model and all its layers. The `utils.py` file will contain `make` function which will start all the loaders, datasets objects, schedulers, etc. and also contains an auxiliar function for inference testing. The `utils_visualization.py` file will contain the code to create the plots of the training and testing. The `train_test_labels_split.py` file will contain the code to separate all the train and test data from the initial ORC labels and images that the dataset contains. The `config.py` file will contain the code with all variables used to have all them in same place. The `hyperparameter_tuning.py` file will contain the code to tune the hyperparameters of the model. The `inference.py` file will contain the code to test the model with a single image. The `main.py` file will contain the code to start the pipeline. The `train.py` file will contain the code to train the model. The `test.py` file will contain the code to test the model. The `environment.yml` file will contain the code with the environment configuration. The `README.md` file will contain the code with the information of the project and finally the `LICENSE` file will contain the code with the license of the project.
 
@@ -144,7 +144,7 @@ We have implemented a `hyperparameter_tuning.py` module using Optuna to find the
 
 It is important to note that the tests conducted to find the best hyperparameters were of a pilot nature and do not have sufficient strength to determine the optimal hyperparameter combination. This is because we significantly reduced the search space, the number of trials, and the number of epochs per trial to avoid waiting for more than 20 hours to perform a "decent" hyperparameter tuning.
 
-## Tests done and Observations (Abel)
+## Tests done and Observations
 
 *Before we begin explaining and analyzing the different experiments conducted, it is important to note that we have only logged the loss and accuracy metrics from the evaluation of the train (using the validationloader) and the test sets. Therefore, in those graphs where you see train_*, it refers to the evaluation during training. We acknowledge that it is important to also track the metrics for the train set, but we overlooked this when logging the experiments in wandb. In summary, we only have tracking of the metrics for the validation and test sets.
 
@@ -170,7 +170,8 @@ PD: The significant difference between the test loss and the validation loss at 
 
 #### -- ShuffleNet --
 
-![W&B Chart 3_6_2023 19_08_17](readme_images/W&B Chart 3_6_2023 19_08_17.png) ![W&B Chart 3_6_2023 19_08_32](readme_images/W&B Chart 3_6_2023 19_08_32.png)
+<img src="readme_images/W&B Chart 3_6_2023 19_08_17.png" height="200">
+<img src="readme_images/W&B Chart 3_6_2023 19_08_32.png" height="200">
 
 - Accuracy TEST - 0.7299
 - Loss TEST - 0.0640
@@ -183,7 +184,8 @@ We see that shufflenet gives us worse result than ResNet50, but it is faster to 
 
 #### -- ES_ResneXt101 --
 
-![W&B Chart 3_6_2023 19_23_05](readme_images/W&B Chart 3_6_2023 19_23_05.png) ![W&B Chart 3_6_2023 19_23_16](readme_images/W&B Chart 3_6_2023 19_23_16.png)
+<img src="readme_images/W&B Chart 3_6_2023 19_23_05.png" height="200">
+<img src="readme_images/W&B Chart 3_6_2023 19_23_16.png" height="200">
 
 - Accuracy TEST - 0.7925
 - Loss TEST - 0.0494
