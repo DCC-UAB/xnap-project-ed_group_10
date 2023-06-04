@@ -170,7 +170,7 @@ PD: The significant difference between the test loss and the validation loss at 
 
 #### -- ShuffleNet --
 
-![sufflenet acc](readme_images/W&B Chart 3_6_2023 19_08_17.png) ![sufflenet loss](readme_images/W&B Chart 3_6_2023 19_08_32.png)
+![sufflenet_acc](readme_images/W&B Chart 3_6_2023 19_08_17.png) ![sufflenet_loss](readme_images/W&B Chart 3_6_2023 19_08_32.png)
 
 - Accuracy TEST - 0.7299
 - Loss TEST - 0.0640
@@ -183,7 +183,7 @@ We see that shufflenet gives us worse result than ResNet50, but it is faster to 
 
 #### -- ES_ResneXt101 --
 
-![resnext acc](readme_images/W&B Chart 3_6_2023 19_23_05.png) ![resnext loss](readme_images/W&B Chart 3_6_2023 19_23_16.png)
+![resnext_acc](readme_images/W&B Chart 3_6_2023 19_23_05.png) ![resnext_loss](readme_images/W&B Chart 3_6_2023 19_23_16.png)
 
 - Accuracy TEST - 0.7925
 - Loss TEST - 0.0494
