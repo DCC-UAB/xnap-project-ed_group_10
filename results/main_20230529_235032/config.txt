@@ -1,0 +1,11 @@
+Date: 2023 05 29, 23 50 42
+epochs: 1
+classes: 28
+batch_size: 16
+learning_rate: 0.0001
+scheduler: reducelronplateau
+dataset: Business Dataset
+architecture: Context Transformer
+pretained_model: resnet50
+text_model: bert
+device: cuda:0
