@@ -170,13 +170,13 @@ PD: The significant difference between the test loss and the validation loss at 
 
  We use 20 epochs to train both models.
 
--- ShuffleNet --
+#### -- ShuffleNet --
 
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png)
-![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_08_32.png)
+<img src="readme_images/W&B Chart 3_6_2023 19_08_17.png" height="200">
+<img src="readme_images/W&B Chart 3_6_2023 19_08_32.png" height="200">
 
-Accuracy TEST - 0.7299
-Loss TEST - 0.0640
+- Accuracy TEST - 0.7299
+- Loss TEST - 0.0640
 
 As we can see, the loss have deteriorate 31% with respect to ResNet50. This is probably due to the fact that shuffle net it is not as profound as ResNet50 and dose not have the same learning capacity.
 
@@ -184,13 +184,13 @@ The model training took 1h 50m 42s(-25.9% less with respect to ResNet50.).
 
 We see that shufflenet gives us worse result than ResNet50, but it is faster to train.
 
--- ES_ResneXt101 --
+#### -- ES_ResneXt101 --
 
-![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png)
-![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_23_16.png)
+<img src="readme_images/W&B Chart 3_6_2023 19_23_05.png" height="200">
+<img src="readme_images/W&B Chart 3_6_2023 19_23_16.png" height="200">
 
-Accuracy TEST - 0.7925
-Loss TEST - 0.0494
+- Accuracy TEST - 0.7925  
+- Loss TEST - 0.0494
 
 As we can see, the loss have improved 1.32% with respect to ResNet50.
 
@@ -202,13 +202,31 @@ We belive that this model with more epochs would probably exceed the ResNet50, b
 
 In this third test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different optimizers](#Different-Optimizers-used). In addition, we will examine the performance of the AdamW optimizer.
 
-*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
+Adam:
+
+![adam_acc](readme_images/adam_acc.png) ![adam_loss](readme_images/adam_loss.png)
+
+AdamW:
+
+![adamw_acc](readme_images/adamw_acc.png) ![adamw_loss](readme_images/adamw_loss.png)
+
+As we can see, the both accuracy and loss are very similar for both optimizers. That was a bit unexpected, since AdamW is supposed to be an improved version of Adam.
 
 ### Test 4: Performance of different schedulers used
 
 In this fourth test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different schedulers](#Different-Learning-Rate-Schedulers-used). In addition, we will examine the performance of the ReduceLROnPlateau scheduler.
 
-*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
+MultiStepLR:
+
+![1685805842906](readme_images/test_loss_multisteplr.png) ![lr_multistep](readme_images/lr_multistep.png)
+
+ReduceLROnPlateau:
+
+![1685805888237](readme_images/test_loss_onplateau.png) ![lr_reducelronplateau](readme_images/lr_onplateau.png)
+
+As we can see, the ReduceLROnPlateau scheduler has a more "aggressive" learning rate reduction strategy than the MultiStepLR scheduler. This is because the former scheduler is more sensitive to stagnation in the model's performance, which is why it reduces the learning rate more frequently.
+
+The results obtained with the ReduceLROnPlateau scheduler are almost identical. Finally we decided to use the ReduceLROnPlateau scheduler because it is more sensitive to stagnation in the model's performance, which is why it reduces the learning rate more frequently.
 
 ### Extra Test: Hyperparameter Tuning with Optuna
 
