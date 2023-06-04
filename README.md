@@ -134,7 +134,7 @@ The initial code had some errors both in its approach and structure.
 - MultiStepLR: The MultiStepLR scheduler is the default scheduler provided in our base project. It is a learning rate adjustment strategy that reduces the learning rate at specific moments during training. It requires a list of milestones (epochs) and reduces the learning rate by a factor of gamma at each of these milestones.
   In our case, we set a list of milestones [15, 30] and a gamma factor of 0.1. This means that the learning rate was reduced by a factor of 0.1 at epochs 15 and 30.
 - ReduceLROnPlateau: The ReduceLROnPlateau scheduler is a learning rate adjustment strategy that reduces the learning rate when a model's improvement reaches a plateau. It monitors a metric, such as validation loss, and if no improvement is observed after a certain number of epochs, it reduces the learning rate by a predetermined factor. The ReduceLROnPlateau scheduler takes into account the evolution of the metric of interest and dynamically adjusts the learning rate based on that information. Therefore, if the model has reached a plateau and is not improving, the scheduler will reduce the learning rate to allow for more precise adjustments and potentially escape of local min.
-  In our case, the ReduceLROnPlateau scheduler will dynamically adjust the learning rate based on the loss performance. We have set a threshold of 0.1 to indicate that the loss needs to improve by at least 1% to be considered an improvement. If no improvement is observed in the loss for 3 consecutive epochs (patience), the learning rate will be reduced by a factor of 0.1.
+  In our case, the ReduceLROnPlateau scheduler will dynamically adjust the learning rate based on the loss performance. We have set a threshold of 0.1 to indicate that the loss needs to improve by at least 1% to be considered an improvement. If no improvement is observed in the loss for 5 consecutive epochs (patience), the learning rate will be reduced by a factor of 0.1.
 
   The hypothesis behind the change in scheduler is as follows:
 - The MultiStepLR scheduler is a simple but effective strategy to reduce the learning rate at predefined moments during training. However, it has a significant drawback: it does not consider whether the model has reached a plateau or is not improving. This means that the reduction in the learning rate occurs fixedly, regardless of the actual training situation.
@@ -168,9 +168,35 @@ PD: The significant difference between the test loss and the validation loss at 
 
 ### Test 2: Performance of different pretrained CNN models used
 
-In this second test, we will observe the difference (improvement/deterioration) in our accuracy and loss when using [different pretrained CNN models](#Different-pretrained-CNN-models-used). In addition, we will examine the performance of the previously mentioned pretrained CNN models.
+ We use 20 epochs to train both models.
 
-*FALTA GRAFICAS  + EXPLICACION + CONCLUSIONES*
+-- ShuffleNet --
+
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_08_17.png)
+![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_08_32.png)
+
+Accuracy TEST - 0.7299
+Loss TEST - 0.0640
+
+As we can see, the loss have deteriorate 31% with respect to ResNet50. This is probably due to the fact that shuffle net it is not as profound as ResNet50 and dose not have the same learning capacity.
+
+The model training took 1h 50m 42s(-25.9% less with respect to ResNet50.).
+
+We see that shufflenet gives us worse result than ResNet50, but it is faster to train.
+
+-- ES_ResneXt101 --
+
+![Acc_Sufflenet](readme_images/W&B Chart 3_6_2023 19_23_05.png)
+![Loss_shufflenet](readme_images/W&B Chart 3_6_2023 19_23_16.png)
+
+Accuracy TEST - 0.7925
+Loss TEST - 0.0494
+
+As we can see, the loss have improved 1.32% with respect to ResNet50.
+
+The model training took 4h 20m 20s (+51.17% more with respect to ResNet50.). The model took more time to train due to the fact that the model is more complex.
+
+We belive that this model with more epochs would probably exceed the ResNet50, but that means to spend more time and more computational power trainning.
 
 ### Test 3: Performance of different optimizers used
 
@@ -203,16 +229,20 @@ The hyperparameter tuning was conducted with the following configurations:
 Below you can see some graphs comparing the results of the different trials.
 
 ![1685810890670](readme_images/sweepht.png)
-
-![1685810890670](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/abelb/github-classroom/DCC-UAB/xnap-project-ed_group_10/readme_images/accht.png)
-
+![1685810890670](readme_images/accht.png)
 ![1685810890670](readme_images/lossht.png)
 
 As we can see, with 5 epochs, the best combination found is a batch size of 64 and a learning rate of 0.0001, followed by a batch size of 16 and a learning rate of 0.00001 (which we were using previously).
 
 However, it's important to note that due to the limited number of epochs in this experiment (for computational cost reasons), we cannot confirm that this hyperparameter combination is the best. To accurately determine the optimal hyperparameters, it is recommended to perform hyperparameter tuning with a minimum of 15-20 epochs and more than 10 trials. This would allow for a more comprehensive exploration of the hyperparameter space and provide more reliable and justified choices for the hyperparameters.
 
-## To Improve
+As I mentioned before, since 5 epochs is not significant enough to determine whether a batch size of 64 and a learning rate of 0.0001 are the best hyperparameters, we have trained the model with these settings for 30 epochs.
+
+![1685810890670](readme_images/htloss.png)![1685810890670](readme_images/httrain1.png)
+
+![1685825087223](readme_images/hthtlr.png)![1685810890670](readme_images/htresum.png)
+
+As we can see, the results are not bad, but they are slightly worse than using a batch size of 16 and a learning rate of 0.0001. The reason why these hyperparameters were better with 5 epochs is that with a larger batch size and learning rate, the model is able to learn faster in the initial epochs, but afterwards it can lead to oscillations in the model weights and make it difficult to converge to an optimal solution.
 
 Based on the initial executions and the improvements we already implemented, some potential areas for improvement are identified:
 
